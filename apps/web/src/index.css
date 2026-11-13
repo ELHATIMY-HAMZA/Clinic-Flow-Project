@@ -1,13 +1,235 @@
 @import "tailwindcss";
 
-/* Prevent scroll chaining behind native modal <dialog> elements */
+/* ─── design-taste-frontend (Leonxlnx/taste-skill) System Tokens ─── */
+:root {
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* 90–95% Neutral Surfaces + Warm Near-Black Ink + Single Clinical Teal Accent (no violet/lavender) */
+  --g-main: #f4f4f2;
+  --g-alt: #eaeae6;
+  --g-dark: #090d10;
+  --card: #ffffff;
+  --card-dark: #12171c;
+  --ink: #0c0f12;
+  --c-text: rgba(12, 15, 18, 0.86);
+  --muted: #5a626a;
+  --hairline: rgba(12, 15, 18, 0.11);
+  --action: #0d9488;
+  --action-hover: #0b7c72;
+
+  /* Spacing rhythm scale: 4, 8, 12, 16, 24, 32, 48, 64, 96, 128 */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+
+  /* Radius family: soft (8 / 12 / 20) */
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  --r-btn: 10px;
+
+  /* Motion tokens from taste-skill/references/motion.md */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --m-ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --m-in: 150ms;
+  --m-out: 120ms;
+  --m-press: 90ms;
+  --m-cycle: 3.2s;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--g-main);
+  color: var(--ink);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Accessible skip link (taste-skill house rule) */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 16px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: var(--r-sm);
+  background: var(--ink);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-150%);
+  transition: transform var(--m-in) var(--ease);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--action);
+  outline-offset: 2px;
+}
+
+/* Taste-skill tactile button micro-interactions (hover -1px, press +1px & scale .985, arrow +3px) */
+@media (hover: hover) and (pointer: fine) {
+  .btn-taste {
+    transition:
+      transform var(--m-out) var(--ease),
+      background-color var(--m-out) var(--ease),
+      border-color var(--m-out) var(--ease),
+      color var(--m-out) var(--ease),
+      box-shadow var(--m-out) var(--ease);
+  }
+  .btn-taste:hover:not(:disabled) {
+    transform: translateY(-1px);
+    transition-duration: var(--m-in);
+  }
+  .btn-taste:active:not(:disabled) {
+    transform: translateY(1px) scale(0.985);
+    transition-duration: var(--m-press);
+  }
+  .btn-taste .m-arrow {
+    transition: transform var(--m-out) var(--ease);
+  }
+  .btn-taste:hover:not(:disabled) .m-arrow {
+    transform: translateX(3px);
+    transition-duration: var(--m-in);
+  }
+
+  /* Linked card lifts 2px on hover */
+  .card-lift {
+    transition:
+      transform 120ms var(--ease),
+      border-color 120ms var(--ease),
+      box-shadow 120ms var(--ease);
+  }
+  .card-lift:hover {
+    transform: translateY(-2px);
+    border-color: rgba(12, 15, 18, 0.22);
+    box-shadow: 0 12px 24px -8px rgba(12, 15, 18, 0.07);
+    transition-duration: 180ms;
+  }
+}
+
+/* ─── ReactBits BorderGlow (https://reactbits.dev/components/border-glow) ─── */
+.border-glow-card {
+  position: relative;
+  --mouse-x: -1000px;
+  --mouse-y: -1000px;
+  --glow-color: rgba(13, 148, 136, 0.75);
+  --spotlight-color: rgba(13, 148, 136, 0.05);
+  --border-radius: 20px;
+  border-radius: var(--border-radius);
+}
+
+.border-glow-effect {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.border-glow-effect::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: radial-gradient(
+    360px circle at var(--mouse-x) var(--mouse-y),
+    var(--glow-color),
+    transparent 45%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms var(--ease);
+}
+
+.border-glow-card:hover .border-glow-effect::before,
+.border-glow-card:focus-within .border-glow-effect::before {
+  opacity: 1;
+}
+
+.border-glow-spotlight {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(
+    420px circle at var(--mouse-x) var(--mouse-y),
+    var(--spotlight-color),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 250ms var(--ease);
+}
+
+.border-glow-card:hover .border-glow-spotlight,
+.border-glow-card:focus-within .border-glow-spotlight {
+  opacity: 1;
+}
+
+/* SVG diagram pulse loop (taste-skill 3.2s cycle) */
+@keyframes diagram-pulse {
+  0% {
+    stroke-dashoffset: 120;
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.25;
+  }
+}
+
+.animate-diagram-pulse {
+  stroke-dasharray: 24 96;
+  animation: diagram-pulse var(--m-cycle) linear infinite;
+}
+
+/* Native modal <dialog> scroll containment */
 dialog:modal {
   overscroll-behavior: contain;
 }
 
 dialog::backdrop {
-  background-color: rgb(15 23 42 / 0.55);
-  backdrop-filter: blur(2px);
+  background-color: rgba(9, 13, 16, 0.58);
+  backdrop-filter: blur(3px);
   overflow: hidden;
   overscroll-behavior: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

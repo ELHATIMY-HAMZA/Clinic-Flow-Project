@@ -8,8 +8,25 @@ import {
   useDashboardStats,
   useUpdateAppointmentStatus,
 } from '../api/hooks.js';
+import {
+  BentoGrid,
+  BentoGridItem,
+  ClinicalPulseDiagram,
+} from '../components/aceternity/BentoGrid.js';
 import { AppointmentFormDialog } from '../components/AppointmentFormDialog.js';
+import { BorderGlow } from '../components/reactbits/BorderGlow.js';
+import { Badge } from '../components/ui/Badge.js';
+import { Button } from '../components/ui/Button.js';
+import { Skeleton } from '../components/ui/Skeleton.js';
 import { StatusBadge } from '../components/ui/StatusBadge.js';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '../components/ui/Table.js';
 import { formatDateTimeFr, getErrorMessage } from '../lib/utils.js';
 
 export function DashboardPage() {
@@ -29,156 +46,175 @@ export function DashboardPage() {
   }
 
   const stats = statsQuery.data;
-  const cards = [
-    {
-      label: 'Total patients',
-      value: stats?.totalPatients ?? '—',
-      sub: 'Dossiers enregistrés',
-      icon: Users,
-      accent: 'bg-sky-50 text-sky-700 ring-sky-600/15',
-    },
-    {
-      label: 'Rendez-vous du jour',
-      value: stats?.todayAppointments ?? '—',
-      sub: "Planifiés aujourd'hui",
-      icon: CalendarClock,
-      accent: 'bg-teal-50 text-teal-700 ring-teal-600/15',
-    },
-    {
-      label: 'En attente (pending)',
-      value: stats?.pendingAppointments ?? '—',
-      sub: 'À confirmer',
-      icon: Clock,
-      accent: 'bg-amber-50 text-amber-700 ring-amber-600/15',
-    },
-    {
-      label: 'Confirmés (confirmed)',
-      value: stats?.confirmedAppointments ?? '—',
-      sub: 'Créneaux validés',
-      icon: CalendarCheck2,
-      accent: 'bg-emerald-50 text-emerald-700 ring-emerald-600/15',
-    },
-  ] as const;
-
   const todayAppointments = todayApptsQuery.data?.data ?? [];
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+      {/* Header following taste-skill two-part sentence hierarchy */}
+      <header className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Tableau de bord</h1>
-          <p className="mt-1 text-sm text-slate-600">
-            Vue d’ensemble de l’activité de la clinique et des rendez-vous du jour.
+          <p className="font-mono text-[12px] font-medium tracking-wide text-[#0d9488] uppercase">
+            Vue d’ensemble · {todayIso}
           </p>
+          <h1 className="mt-1 text-[28px] leading-tight font-bold tracking-tight text-[#0c0f12] sm:text-[32px]">
+            Tableau de bord clinique.{' '}
+            <span className="font-normal text-[#5a626a]">
+              Activité du jour et suivi des créneaux.
+            </span>
+          </h1>
         </div>
-        <button
-          type="button"
-          onClick={() => setCreateOpen(true)}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:bg-teal-700"
-        >
-          <Plus className="h-4 w-4" aria-hidden="true" />
-          Nouveau rendez-vous
-        </button>
-      </div>
+        <div className="flex items-center gap-2.5">
+          <Button type="button" variant="secondary" asChild>
+            <Link to="/patients">Voir les patients</Link>
+          </Button>
+          <Button type="button" onClick={() => setCreateOpen(true)} withArrow>
+            <Plus className="h-4 w-4" aria-hidden="true" />
+            Planifier un rendez-vous
+          </Button>
+        </div>
+      </header>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {cards.map(({ label, value, sub, icon: Icon, accent }) => (
-          <div
-            key={label}
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-2xs transition hover:shadow-md"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-slate-600">{label}</span>
-              <span
-                className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ring-1 ${accent}`}
-              >
-                <Icon className="h-5 w-5" aria-hidden="true" />
+      {/* Aceternity BentoGrid + ReactBits BorderGlow Stat Cards */}
+      <BentoGrid>
+        <BentoGridItem
+          index={0}
+          className="lg:col-span-3"
+          title="Total patients"
+          value={statsQuery.isLoading ? '—' : (stats?.totalPatients ?? 0)}
+          description="Dossiers patients actifs enregistrés dans la clinique"
+          icon={<Users className="h-5 w-5 text-[#0d9488]" aria-hidden="true" />}
+          glowColor="rgba(13, 148, 136, 0.78)"
+        />
+        <BentoGridItem
+          index={1}
+          className="lg:col-span-3"
+          title="Rendez-vous du jour"
+          value={statsQuery.isLoading ? '—' : (stats?.todayAppointments ?? 0)}
+          description="Consultations programmées sur la journée en cours"
+          icon={<CalendarClock className="h-5 w-5 text-[#0c0f12]" aria-hidden="true" />}
+          glowColor="rgba(12, 15, 18, 0.55)"
+        />
+        <BentoGridItem
+          index={2}
+          className="lg:col-span-3"
+          title="En attente (pending)"
+          value={statsQuery.isLoading ? '—' : (stats?.pendingAppointments ?? 0)}
+          description="Rendez-vous en attente de validation par l’équipe"
+          icon={<Clock className="h-5 w-5 text-amber-600" aria-hidden="true" />}
+          glowColor="rgba(245, 158, 11, 0.75)"
+        />
+        <BentoGridItem
+          index={3}
+          className="lg:col-span-3"
+          title="Confirmés (confirmed)"
+          value={statsQuery.isLoading ? '—' : (stats?.confirmedAppointments ?? 0)}
+          description="Créneaux validés (protégés par la fenêtre de 30 minutes)"
+          icon={<CalendarCheck2 className="h-5 w-5 text-emerald-600" aria-hidden="true" />}
+          glowColor="rgba(16, 185, 129, 0.75)"
+        />
+      </BentoGrid>
+
+      {/* Live Workflow Visual Banner + Today's Appointments Table */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <BorderGlow className="flex flex-col justify-between p-6 lg:p-7" containerClassName="lg:col-span-5">
+          <div className="space-y-2">
+            <Badge variant="teal">Règle métier garantie</Badge>
+            <h2 className="text-[18px] font-semibold tracking-tight text-[#0c0f12]">
+              Anti-chevauchement des consultations.{' '}
+              <span className="font-normal text-[#5a626a]">
+                Vérifié par l’API et PostgreSQL.
               </span>
-            </div>
-            <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900">{value}</p>
-            <p className="mt-1 text-xs text-slate-500">{sub}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Today's appointments */}
-      <section className="rounded-2xl border border-slate-200 bg-white shadow-2xs">
-        <div className="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-          <div>
-            <h2 className="text-base font-semibold text-slate-900">Rendez-vous d’aujourd’hui</h2>
-            <p className="text-xs text-slate-500">
-              Accès rapide aux consultations prévues ce jour
+            </h2>
+            <p className="text-[14px] leading-relaxed text-[#5a626a]">
+              Un patient ne peut pas avoir deux rendez-vous confirmés dans une fenêtre de 30
+              minutes. Les créneaux en attente restent modifiables jusqu’à confirmation.
             </p>
           </div>
-          <Link
-            to="/appointments"
-            className="text-sm font-semibold text-teal-700 hover:text-teal-800"
-          >
-            Voir tous les rendez-vous →
-          </Link>
-        </div>
-
-        {todayApptsQuery.isLoading ? (
-          <div className="p-8 text-center text-sm text-slate-500">Chargement des rendez-vous…</div>
-        ) : todayAppointments.length === 0 ? (
-          <div className="p-8 text-center text-sm text-slate-500">
-            Aucun rendez-vous programmé pour aujourd’hui.
+          <div className="mt-5">
+            <ClinicalPulseDiagram />
           </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-              <thead className="bg-slate-50 text-xs font-semibold tracking-wider text-slate-500 uppercase">
-                <tr>
-                  <th className="px-6 py-3">Horaire</th>
-                  <th className="px-6 py-3">Patient</th>
-                  <th className="px-6 py-3">Motif</th>
-                  <th className="px-6 py-3">Statut</th>
-                  <th className="px-6 py-3 text-right">Changer le statut</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
+        </BorderGlow>
+
+        <BorderGlow className="overflow-hidden p-0" containerClassName="lg:col-span-7">
+          <div className="flex items-center justify-between border-b border-[#0c0f12]/[0.08] px-6 py-5">
+            <div>
+              <h2 className="text-[18px] font-semibold tracking-tight text-[#0c0f12]">
+                Consultations d’aujourd’hui.{' '}
+                <span className="font-normal text-[#5a626a]">
+                  {todayAppointments.length} créneau{todayAppointments.length > 1 ? 'x' : ''}
+                </span>
+              </h2>
+            </div>
+            <Button variant="secondary" size="sm" asChild withArrow>
+              <Link to="/appointments">Planning complet</Link>
+            </Button>
+          </div>
+
+          {todayApptsQuery.isLoading ? (
+            <div className="space-y-3 p-6">
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+          ) : todayAppointments.length === 0 ? (
+            <div className="p-10 text-center text-[14px] text-[#5a626a]">
+              Aucun rendez-vous programmé pour aujourd’hui.
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Horaire</TableHead>
+                  <TableHead>Patient</TableHead>
+                  <TableHead>Motif</TableHead>
+                  <TableHead>Statut</TableHead>
+                  <TableHead className="text-right">Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {todayAppointments.map((appt) => (
-                  <tr key={appt.id} className="hover:bg-slate-50/75">
-                    <td className="px-6 py-3.5 font-medium whitespace-nowrap text-slate-900">
+                  <TableRow key={appt.id}>
+                    <TableCell className="font-mono text-[13px] font-medium whitespace-nowrap">
                       {formatDateTimeFr(appt.appointmentDate)}
-                    </td>
-                    <td className="px-6 py-3.5 whitespace-nowrap">
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
                       <Link
                         to={`/patients/${appt.patientId}`}
-                        className="font-medium text-teal-700 hover:underline"
+                        className="font-semibold text-[#0c0f12] decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488] hover:underline"
                       >
                         {appt.patientFullName}
                       </Link>
-                      <span className="ml-2 rounded-md bg-slate-100 px-1.5 py-0.5 text-xs text-slate-600">
+                      <span className="ml-2 rounded-md bg-[#f4f4f2] px-1.5 py-0.5 font-mono text-[11px] text-[#5a626a]">
                         {appt.patientCin}
                       </span>
-                    </td>
-                    <td className="px-6 py-3.5 text-slate-700">{appt.reason}</td>
-                    <td className="px-6 py-3.5 whitespace-nowrap">
+                    </TableCell>
+                    <TableCell className="max-w-[200px] truncate text-[#5a626a]">
+                      {appt.reason}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
                       <StatusBadge status={appt.status} />
-                    </td>
-                    <td className="px-6 py-3.5 text-right whitespace-nowrap">
+                    </TableCell>
+                    <TableCell className="text-right whitespace-nowrap">
                       <select
                         aria-label={`Statut du rendez-vous de ${appt.patientFullName}`}
                         value={appt.status}
                         onChange={(e) =>
                           void handleStatusChange(appt.id, e.target.value as AppointmentStatus)
                         }
-                        className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-medium text-slate-700 focus:border-teal-600 focus:outline-none"
+                        className="h-8 rounded-lg border border-[#0c0f12]/[0.15] bg-white px-2.5 text-[12px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
                       >
                         <option value="pending">En attente</option>
                         <option value="confirmed">Confirmé</option>
                         <option value="cancelled">Annulé</option>
                       </select>
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
+              </TableBody>
+            </Table>
+          )}
+        </BorderGlow>
+      </div>
 
       <AppointmentFormDialog open={createOpen} onClose={() => setCreateOpen(false)} />
     </div>

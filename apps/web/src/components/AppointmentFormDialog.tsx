@@ -3,7 +3,9 @@ import { toast } from 'sonner';
 import type { AppointmentStatus, Patient } from '@clinicflow/shared';
 import { useCreateAppointment, usePatientsList } from '../api/hooks.js';
 import { getErrorMessage, toDateTimeLocalValue } from '../lib/utils.js';
+import { Button } from './ui/Button.js';
 import { Dialog } from './ui/Dialog.js';
+import { Input, Label } from './ui/Input.js';
 
 interface AppointmentFormDialogProps {
   open: boolean;
@@ -85,30 +87,30 @@ export function AppointmentFormDialog({
     <Dialog
       open={open}
       onClose={onClose}
-      title="Nouveau rendez-vous"
-      description="Planifiez un rendez-vous pour un patient. Deux rendez-vous confirmés d’un même patient doivent être espacés d’au moins 30 minutes."
+      title="Planifier un rendez-vous"
+      description="Deux rendez-vous confirmés d’un même patient doivent être espacés d’au moins 30 minutes."
     >
       <form onSubmit={handleSubmit} noValidate className="space-y-4">
         {formError ? (
           <div
             role="alert"
-            className="rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-2.5 text-xs font-medium text-rose-800"
+            className="rounded-[10px] border border-rose-500/25 bg-rose-50 px-3.5 py-2.5 text-[13px] font-medium text-rose-800"
           >
             {formError}
           </div>
         ) : null}
 
         <div>
-          <label htmlFor="appt-patient" className="block text-sm font-medium text-slate-700">
+          <Label htmlFor="appt-patient">
             Patient <span className="text-rose-600">*</span>
-          </label>
+          </Label>
           {defaultPatient ? (
-            <input
+            <Input
               id="appt-patient"
               type="text"
               disabled
               value={`${defaultPatient.fullName} (${defaultPatient.cin})`}
-              className="mt-1 block w-full rounded-xl border border-slate-200 bg-slate-100 px-3.5 py-2 text-sm text-slate-700"
+              className="mt-1.5"
             />
           ) : (
             <select
@@ -117,7 +119,7 @@ export function AppointmentFormDialog({
               required
               value={patientId}
               onChange={(e) => setPatientId(e.target.value)}
-              className="mt-1 block w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
+              className="mt-1.5 flex h-11 w-full rounded-[10px] border border-[#0c0f12]/[0.15] bg-white px-3.5 py-2 text-[14px] text-[#0c0f12] focus:border-[#0d9488] focus:ring-3 focus:ring-[#0d9488]/15 focus:outline-none"
             >
               <option value="">Sélectionner un patient…</option>
               {patients.map((p) => (
@@ -131,30 +133,28 @@ export function AppointmentFormDialog({
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="appt-datetime" className="block text-sm font-medium text-slate-700">
+            <Label htmlFor="appt-datetime">
               Date et heure <span className="text-rose-600">*</span>
-            </label>
-            <input
+            </Label>
+            <Input
               id="appt-datetime"
               name="appointmentDate"
               type="datetime-local"
               required
               value={dateTimeLocal}
               onChange={(e) => setDateTimeLocal(e.target.value)}
-              className="mt-1 block w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
+              className="mt-1.5"
             />
           </div>
 
           <div>
-            <label htmlFor="appt-status" className="block text-sm font-medium text-slate-700">
-              Statut initial
-            </label>
+            <Label htmlFor="appt-status">Statut initial</Label>
             <select
               id="appt-status"
               name="status"
               value={status}
               onChange={(e) => setStatus(e.target.value as AppointmentStatus)}
-              className="mt-1 block w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
+              className="mt-1.5 flex h-11 w-full rounded-[10px] border border-[#0c0f12]/[0.15] bg-white px-3.5 py-2 text-[14px] text-[#0c0f12] focus:border-[#0d9488] focus:ring-3 focus:ring-[#0d9488]/15 focus:outline-none"
             >
               <option value="pending">En attente (pending)</option>
               <option value="confirmed">Confirmé (confirmed)</option>
@@ -164,25 +164,25 @@ export function AppointmentFormDialog({
         </div>
 
         <div>
-          <label htmlFor="appt-reason" className="block text-sm font-medium text-slate-700">
+          <Label htmlFor="appt-reason">
             Motif de consultation <span className="text-rose-600">*</span>
-          </label>
-          <input
+          </Label>
+          <Input
             id="appt-reason"
             name="reason"
             type="text"
             required
-            placeholder="Ex. Consultation générale, contrôle annuel…"
+            placeholder="Ex. Consultation générale, suivi tension…"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            className="mt-1 block w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
+            className="mt-1.5"
           />
         </div>
 
         <div>
-          <label htmlFor="appt-notes" className="block text-sm font-medium text-slate-700">
-            Notes <span className="text-xs font-normal text-slate-400">(optionnel)</span>
-          </label>
+          <Label htmlFor="appt-notes">
+            Notes <span className="font-normal text-[#5a626a]">(optionnel)</span>
+          </Label>
           <textarea
             id="appt-notes"
             name="notes"
@@ -190,25 +190,17 @@ export function AppointmentFormDialog({
             placeholder="Observations ou instructions particulières…"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="mt-1 block w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
+            className="mt-1.5 block w-full rounded-[10px] border border-[#0c0f12]/[0.15] bg-white px-3.5 py-2 text-[14px] text-[#0c0f12] transition-[border-color,box-shadow] duration-140 placeholder:text-[#5a626a]/65 focus:border-[#0d9488] focus:ring-3 focus:ring-[#0d9488]/15 focus:outline-none"
           />
         </div>
 
-        <div className="flex items-center justify-end gap-2.5 border-t border-slate-100 pt-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-          >
+        <div className="flex items-center justify-end gap-2.5 border-t border-[#0c0f12]/[0.08] pt-4">
+          <Button type="button" variant="secondary" onClick={onClose}>
             Annuler
-          </button>
-          <button
-            type="submit"
-            disabled={createMutation.isPending}
-            className="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-xs transition hover:bg-teal-700 disabled:opacity-60"
-          >
-            {createMutation.isPending ? 'Création…' : 'Planifier le rendez-vous'}
-          </button>
+          </Button>
+          <Button type="submit" disabled={createMutation.isPending} withArrow>
+            {createMutation.isPending ? 'Planification…' : 'Planifier le rendez-vous'}
+          </Button>
         </div>
       </form>
     </Dialog>

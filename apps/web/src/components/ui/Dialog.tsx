@@ -13,8 +13,8 @@ interface DialogProps {
 
 /**
  * Accessible modal dialog built on the native HTML `<dialog>` element (`showModal()`).
- * Follows Modern Web Guidance: native focus containment, top-layer, `Esc` dismissal,
- * and `aria-labelledby` without redundant `role="dialog"` / `aria-modal`.
+ * Styled according to `design-taste-frontend` (20px radius, 1px hairline border,
+ * warm near-black ink, 24px+ padding).
  */
 export function Dialog({
   open,
@@ -45,17 +45,17 @@ export function Dialog({
       aria-describedby={description ? descId : undefined}
       onClose={onClose}
       className={cn(
-        'm-auto w-full max-w-lg rounded-2xl border border-slate-200 bg-white p-0 text-slate-900 shadow-2xl',
+        'm-auto w-full max-w-lg rounded-[20px] border border-[#0c0f12]/[0.14] bg-white p-0 text-[#0c0f12] shadow-2xl',
         className,
       )}
     >
-      <div className="flex items-start justify-between border-b border-slate-100 px-6 py-4">
+      <div className="flex items-start justify-between border-b border-[#0c0f12]/[0.08] px-6 py-5">
         <div>
-          <h2 id={titleId} className="text-lg font-semibold text-slate-900">
+          <h2 id={titleId} className="text-[18px] font-semibold tracking-tight text-[#0c0f12]">
             {title}
           </h2>
           {description ? (
-            <p id={descId} className="mt-0.5 text-sm text-slate-500">
+            <p id={descId} className="mt-1 text-[13px] leading-relaxed text-[#5a626a]">
               {description}
             </p>
           ) : null}
@@ -64,12 +64,12 @@ export function Dialog({
           type="button"
           onClick={onClose}
           aria-label="Fermer la boîte de dialogue"
-          className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+          className="rounded-lg p-1.5 text-[#5a626a] transition hover:bg-[#f4f4f2] hover:text-[#0c0f12]"
         >
           <X className="h-5 w-5" />
         </button>
       </div>
-      <div className="px-6 py-5">{children}</div>
+      <div className="p-6">{children}</div>
     </dialog>
   );
 }

@@ -14,7 +14,8 @@ dist/
 *.log
 npm-debug.log*
 
-# editors / OS
+# editors / OS / agent skills
+.agents/
 .vscode/*
 !.vscode/extensions.json
 .idea/

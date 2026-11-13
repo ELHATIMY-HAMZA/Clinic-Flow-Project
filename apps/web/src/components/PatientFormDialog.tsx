@@ -10,7 +10,9 @@ import {
 } from '@clinicflow/shared';
 import { useCreatePatient, useUpdatePatient } from '../api/hooks.js';
 import { getErrorMessage } from '../lib/utils.js';
+import { Button } from './ui/Button.js';
 import { Dialog } from './ui/Dialog.js';
+import { Input, Label } from './ui/Input.js';
 
 interface PatientFormDialogProps {
   open: boolean;
@@ -79,30 +81,30 @@ export function PatientFormDialog({ open, onClose, patient }: PatientFormDialogP
     <Dialog
       open={open}
       onClose={onClose}
-      title={isEdit ? 'Modifier le patient' : 'Nouveau patient'}
+      title={isEdit ? 'Modifier le dossier patient' : 'Nouveau dossier patient'}
       description={
         isEdit
-          ? 'Mettez à jour les coordonnées du patient.'
-          : 'Renseignez les informations du dossier patient.'
+          ? 'Mettez à jour les coordonnées administratives du patient.'
+          : 'Renseignez les informations obligatoires du patient.'
       }
     >
       <form onSubmit={onSubmit} noValidate className="space-y-4">
         <div>
-          <label htmlFor="patient-fullName" className="block text-sm font-medium text-slate-700">
+          <Label htmlFor="patient-fullName">
             Nom complet <span className="text-rose-600">*</span>
-          </label>
-          <input
+          </Label>
+          <Input
             id="patient-fullName"
             type="text"
             required
             aria-invalid={Boolean(errors.fullName)}
             aria-describedby={errors.fullName ? 'patient-fullName-err' : undefined}
             placeholder="Ex. Mohamed Alaoui"
-            className="mt-1 block w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
+            className="mt-1.5"
             {...register('fullName')}
           />
           {errors.fullName ? (
-            <p id="patient-fullName-err" className="mt-1 text-xs text-rose-600">
+            <p id="patient-fullName-err" className="mt-1.5 text-[13px] text-rose-600">
               {errors.fullName.message}
             </p>
           ) : null}
@@ -110,45 +112,45 @@ export function PatientFormDialog({ open, onClose, patient }: PatientFormDialogP
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label htmlFor="patient-cin" className="block text-sm font-medium text-slate-700">
+            <Label htmlFor="patient-cin">
               N° CIN <span className="text-rose-600">*</span>
-            </label>
-            <input
+            </Label>
+            <Input
               id="patient-cin"
               type="text"
               required
               aria-invalid={Boolean(errors.cin)}
               aria-describedby={errors.cin ? 'patient-cin-err' : 'patient-cin-help'}
               placeholder="Ex. AB123456"
-              className="mt-1 block w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm uppercase text-slate-900 shadow-2xs focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
+              className="mt-1.5 font-mono uppercase"
               {...register('cin')}
             />
             {errors.cin ? (
-              <p id="patient-cin-err" className="mt-1 text-xs text-rose-600">
+              <p id="patient-cin-err" className="mt-1.5 text-[13px] text-rose-600">
                 {errors.cin.message}
               </p>
             ) : (
-              <p id="patient-cin-help" className="mt-1 text-xs text-slate-500">
+              <p id="patient-cin-help" className="mt-1.5 text-[13px] text-[#5a626a]">
                 4 à 20 lettres ou chiffres (unique)
               </p>
             )}
           </div>
 
           <div>
-            <label htmlFor="patient-birthDate" className="block text-sm font-medium text-slate-700">
+            <Label htmlFor="patient-birthDate">
               Date de naissance <span className="text-rose-600">*</span>
-            </label>
-            <input
+            </Label>
+            <Input
               id="patient-birthDate"
               type="date"
               required
               aria-invalid={Boolean(errors.birthDate)}
               aria-describedby={errors.birthDate ? 'patient-birthDate-err' : undefined}
-              className="mt-1 block w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
+              className="mt-1.5"
               {...register('birthDate')}
             />
             {errors.birthDate ? (
-              <p id="patient-birthDate-err" className="mt-1 text-xs text-rose-600">
+              <p id="patient-birthDate-err" className="mt-1.5 text-[13px] text-rose-600">
                 {errors.birthDate.message}
               </p>
             ) : null}
@@ -156,62 +158,54 @@ export function PatientFormDialog({ open, onClose, patient }: PatientFormDialogP
         </div>
 
         <div>
-          <label htmlFor="patient-phone" className="block text-sm font-medium text-slate-700">
+          <Label htmlFor="patient-phone">
             Téléphone <span className="text-rose-600">*</span>
-          </label>
-          <input
+          </Label>
+          <Input
             id="patient-phone"
             type="tel"
             required
             aria-invalid={Boolean(errors.phone)}
             aria-describedby={errors.phone ? 'patient-phone-err' : undefined}
             placeholder="Ex. +212 661 234 567"
-            className="mt-1 block w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
+            className="mt-1.5"
             {...register('phone')}
           />
           {errors.phone ? (
-            <p id="patient-phone-err" className="mt-1 text-xs text-rose-600">
+            <p id="patient-phone-err" className="mt-1.5 text-[13px] text-rose-600">
               {errors.phone.message}
             </p>
           ) : null}
         </div>
 
         <div>
-          <label htmlFor="patient-address" className="block text-sm font-medium text-slate-700">
-            Adresse <span className="text-xs font-normal text-slate-400">(optionnel)</span>
-          </label>
+          <Label htmlFor="patient-address">
+            Adresse <span className="font-normal text-[#5a626a]">(optionnel)</span>
+          </Label>
           <textarea
             id="patient-address"
             rows={2}
             aria-invalid={Boolean(errors.address)}
-            placeholder="Ex. 12 Rue Ibn Sina, Rabat"
-            className="mt-1 block w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-900 shadow-2xs focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
+            placeholder="Ex. Rue Ibn Sina, Quartier Agdal"
+            className="mt-1.5 block w-full rounded-[10px] border border-[#0c0f12]/[0.15] bg-white px-3.5 py-2 text-[14px] text-[#0c0f12] transition-[border-color,box-shadow] duration-140 placeholder:text-[#5a626a]/65 focus:border-[#0d9488] focus:ring-3 focus:ring-[#0d9488]/15 focus:outline-none"
             {...register('address')}
           />
           {errors.address ? (
-            <p className="mt-1 text-xs text-rose-600">{errors.address.message}</p>
+            <p className="mt-1.5 text-[13px] text-rose-600">{errors.address.message}</p>
           ) : null}
         </div>
 
-        <div className="flex items-center justify-end gap-2.5 border-t border-slate-100 pt-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-          >
+        <div className="flex items-center justify-end gap-2.5 border-t border-[#0c0f12]/[0.08] pt-4">
+          <Button type="button" variant="secondary" onClick={onClose}>
             Annuler
-          </button>
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-xs transition hover:bg-teal-700 disabled:opacity-60"
-          >
+          </Button>
+          <Button type="submit" disabled={isSubmitting} withArrow>
             {isSubmitting
               ? 'Enregistrement…'
               : isEdit
                 ? 'Enregistrer les modifications'
                 : 'Créer le patient'}
-          </button>
+          </Button>
         </div>
       </form>
     </Dialog>

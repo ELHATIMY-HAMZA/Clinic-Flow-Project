@@ -1,13 +1,33 @@
-import { Filter, Plus, RotateCcw } from 'lucide-react';
+import { Calendar, Plus, RotateCcw } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { toast } from 'sonner';
 import type { AppointmentStatus } from '@clinicflow/shared';
 import { useAppointmentsList, useUpdateAppointmentStatus } from '../api/hooks.js';
+import { AnimatedTabs } from '../components/aceternity/AnimatedTabs.js';
 import { AppointmentFormDialog } from '../components/AppointmentFormDialog.js';
+import { BorderGlow } from '../components/reactbits/BorderGlow.js';
+import { Button } from '../components/ui/Button.js';
+import { Input, Label } from '../components/ui/Input.js';
 import { Pagination } from '../components/ui/Pagination.js';
+import { Skeleton } from '../components/ui/Skeleton.js';
 import { StatusBadge } from '../components/ui/StatusBadge.js';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '../components/ui/Table.js';
 import { formatDateTimeFr, getErrorMessage } from '../lib/utils.js';
+
+const STATUS_TABS = [
+  { value: '', label: 'Tous les statuts' },
+  { value: 'pending', label: 'En attente' },
+  { value: 'confirmed', label: 'Confirmés' },
+  { value: 'cancelled', label: 'Annulés' },
+] as const;
 
 export function AppointmentsPage() {
   const [dateFilter, setDateFilter] = useState<string>('');
@@ -44,152 +64,156 @@ export function AppointmentsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+      <header className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Rendez-vous</h1>
-          <p className="mt-1 text-sm text-slate-600">
-            Consultez le planning, filtrez par date ou statut et gérez les confirmations.
+          <p className="font-mono text-[12px] font-medium tracking-wide text-[#0d9488] uppercase">
+            Planning médical · Fenêtre de sécurité 30 min
           </p>
+          <h1 className="mt-1 text-[28px] leading-tight font-bold tracking-tight text-[#0c0f12] sm:text-[32px]">
+            Rendez-vous.{' '}
+            <span className="font-normal text-[#5a626a]">
+              Filtrez par date ou statut et gérez les confirmations.
+            </span>
+          </h1>
         </div>
-        <button
-          type="button"
-          onClick={() => setCreateOpen(true)}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs transition hover:bg-teal-700"
-        >
+        <Button type="button" onClick={() => setCreateOpen(true)} withArrow>
           <Plus className="h-4 w-4" aria-hidden="true" />
           Nouveau rendez-vous
-        </button>
-      </div>
+        </Button>
+      </header>
 
-      {/* Filters */}
-      <search className="rounded-2xl border border-slate-200 bg-white p-4 shadow-2xs">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
-          <div className="flex-1">
-            <label htmlFor="filter-date" className="block text-xs font-medium text-slate-600">
-              Filtrer par date
-            </label>
-            <input
-              id="filter-date"
-              name="date"
-              type="date"
-              value={dateFilter}
-              onChange={(e) => {
-                setDateFilter(e.target.value);
-                setPage(1);
-              }}
-              className="mt-1 block w-full rounded-xl border border-slate-300 px-3.5 py-2 text-sm text-slate-900 focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
-            />
-          </div>
-
-          <div className="flex-1">
-            <label htmlFor="filter-status" className="block text-xs font-medium text-slate-600">
-              Filtrer par statut
-            </label>
-            <div className="relative mt-1">
-              <Filter
-                className="pointer-events-none absolute top-2.5 left-3.5 h-4 w-4 text-slate-400"
-                aria-hidden="true"
-              />
-              <select
-                id="filter-status"
-                name="status"
+      {/* Filters bar with Aceternity AnimatedTabs + Date Picker inside ReactBits BorderGlow */}
+      <search>
+        <BorderGlow className="p-5">
+          <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+            <div className="space-y-1.5">
+              <span className="block text-[13px] font-medium text-[#0c0f12]">
+                Statut de la consultation
+              </span>
+              <AnimatedTabs
+                items={STATUS_TABS}
                 value={statusFilter}
-                onChange={(e) => {
-                  setStatusFilter(e.target.value as AppointmentStatus | '');
+                onChange={(val) => {
+                  setStatusFilter(val);
                   setPage(1);
                 }}
-                className="block w-full rounded-xl border border-slate-300 bg-white py-2 pr-3.5 pl-10 text-sm text-slate-900 focus:border-teal-600 focus:ring-2 focus:ring-teal-600/20 focus:outline-none"
+                layoutId="appointments-status-filter"
+              />
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+              <div className="w-full sm:w-52">
+                <Label htmlFor="filter-date">Filtrer par date</Label>
+                <div className="relative mt-1.5">
+                  <Calendar
+                    className="pointer-events-none absolute top-3.5 left-3.5 h-4 w-4 text-[#5a626a]"
+                    aria-hidden="true"
+                  />
+                  <Input
+                    id="filter-date"
+                    name="date"
+                    type="date"
+                    value={dateFilter}
+                    onChange={(e) => {
+                      setDateFilter(e.target.value);
+                      setPage(1);
+                    }}
+                    className="h-10 pl-10 text-[13px]"
+                  />
+                </div>
+              </div>
+
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                onClick={resetFilters}
+                disabled={!dateFilter && !statusFilter}
+                className="h-10"
               >
-                <option value="">Tous les statuts</option>
-                <option value="pending">En attente (pending)</option>
-                <option value="confirmed">Confirmé (confirmed)</option>
-                <option value="cancelled">Annulé (cancelled)</option>
-              </select>
+                <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
+                Réinitialiser
+              </Button>
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={resetFilters}
-            disabled={!dateFilter && !statusFilter}
-            className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <RotateCcw className="h-4 w-4" aria-hidden="true" />
-            Réinitialiser
-          </button>
-        </div>
+        </BorderGlow>
       </search>
 
-      {/* Appointments table */}
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xs">
+      {/* Appointments Table wrapped in ReactBits BorderGlow */}
+      <BorderGlow className="overflow-hidden p-0">
         {appointmentsQuery.isLoading ? (
-          <div className="p-10 text-center text-sm text-slate-500">Chargement des rendez-vous…</div>
+          <div className="space-y-3 p-6">
+            <Skeleton className="h-11 w-full" />
+            <Skeleton className="h-11 w-full" />
+            <Skeleton className="h-11 w-full" />
+            <Skeleton className="h-11 w-full" />
+          </div>
         ) : appointments.length === 0 ? (
-          <div className="p-10 text-center text-sm text-slate-500">
+          <div className="p-12 text-center text-[15px] text-[#5a626a]">
             Aucun rendez-vous trouvé pour les filtres sélectionnés.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-200 text-left text-sm">
-              <thead className="bg-slate-50 text-xs font-semibold tracking-wider text-slate-500 uppercase">
-                <tr>
-                  <th className="px-6 py-3.5">Date &amp; heure</th>
-                  <th className="px-6 py-3.5">Patient</th>
-                  <th className="px-6 py-3.5">Motif</th>
-                  <th className="px-6 py-3.5">Notes</th>
-                  <th className="px-6 py-3.5">Créé par</th>
-                  <th className="px-6 py-3.5">Statut</th>
-                  <th className="px-6 py-3.5 text-right">Changer le statut</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
-                {appointments.map((appt) => (
-                  <tr key={appt.id} className="hover:bg-slate-50/75">
-                    <td className="px-6 py-4 font-medium whitespace-nowrap text-slate-900">
-                      {formatDateTimeFr(appt.appointmentDate)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <Link
-                        to={`/patients/${appt.patientId}`}
-                        className="font-semibold text-teal-700 hover:underline"
-                      >
-                        {appt.patientFullName}
-                      </Link>
-                      <span className="ml-2 rounded-md bg-slate-100 px-1.5 py-0.5 font-mono text-xs text-slate-600">
-                        {appt.patientCin}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-slate-800">{appt.reason}</td>
-                    <td className="px-6 py-4 text-slate-500">{appt.notes ?? '—'}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-xs text-slate-500">
-                      {appt.createdByName ?? '—'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <StatusBadge status={appt.status} />
-                    </td>
-                    <td className="px-6 py-4 text-right whitespace-nowrap">
-                      <select
-                        aria-label={`Statut du rendez-vous de ${appt.patientFullName}`}
-                        value={appt.status}
-                        onChange={(e) =>
-                          void handleStatusChange(appt.id, e.target.value as AppointmentStatus)
-                        }
-                        className="rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 focus:border-teal-600 focus:outline-none"
-                      >
-                        <option value="pending">En attente</option>
-                        <option value="confirmed">Confirmé</option>
-                        <option value="cancelled">Annulé</option>
-                      </select>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Date &amp; heure</TableHead>
+                <TableHead>Patient</TableHead>
+                <TableHead>Motif</TableHead>
+                <TableHead>Notes</TableHead>
+                <TableHead>Créé par</TableHead>
+                <TableHead>Statut</TableHead>
+                <TableHead className="text-right">Changer le statut</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {appointments.map((appt) => (
+                <TableRow key={appt.id}>
+                  <TableCell className="font-mono text-[13px] font-medium whitespace-nowrap">
+                    {formatDateTimeFr(appt.appointmentDate)}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <Link
+                      to={`/patients/${appt.patientId}`}
+                      className="font-semibold text-[#0c0f12] decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488] hover:underline"
+                    >
+                      {appt.patientFullName}
+                    </Link>
+                    <span className="ml-2 rounded-md bg-[#f4f4f2] px-1.5 py-0.5 font-mono text-[11px] text-[#5a626a]">
+                      {appt.patientCin}
+                    </span>
+                  </TableCell>
+                  <TableCell className="font-medium text-[#0c0f12]">{appt.reason}</TableCell>
+                  <TableCell className="max-w-[220px] truncate text-[#5a626a]">
+                    {appt.notes ?? '—'}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap text-[13px] text-[#5a626a]">
+                    {appt.createdByName ?? '—'}
+                  </TableCell>
+                  <TableCell className="whitespace-nowrap">
+                    <StatusBadge status={appt.status} />
+                  </TableCell>
+                  <TableCell className="text-right whitespace-nowrap">
+                    <select
+                      aria-label={`Statut du rendez-vous de ${appt.patientFullName}`}
+                      value={appt.status}
+                      onChange={(e) =>
+                        void handleStatusChange(appt.id, e.target.value as AppointmentStatus)
+                      }
+                      className="h-8 rounded-lg border border-[#0c0f12]/[0.15] bg-white px-2.5 text-[12px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
+                    >
+                      <option value="pending">En attente</option>
+                      <option value="confirmed">Confirmé</option>
+                      <option value="cancelled">Annulé</option>
+                    </select>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         )}
 
         {meta ? <Pagination meta={meta} onPageChange={setPage} /> : null}
-      </div>
+      </BorderGlow>
 
       <AppointmentFormDialog open={createOpen} onClose={() => setCreateOpen(false)} />
     </div>
