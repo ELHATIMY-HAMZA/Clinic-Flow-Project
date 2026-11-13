@@ -59,7 +59,7 @@ export const TableHead = forwardRef<HTMLTableCellElement, ThHTMLAttributes<HTMLT
     <th
       ref={ref}
       className={cn(
-        'h-11 px-5 align-middle text-[13px] font-medium text-[#5a626a] whitespace-nowrap',
+        'h-11 px-4 align-middle text-[13px] font-medium text-[#5a626a] whitespace-nowrap',
         className,
       )}
       {...props}
@@ -72,7 +72,7 @@ export const TableCell = forwardRef<HTMLTableCellElement, TdHTMLAttributes<HTMLT
   ({ className, ...props }, ref) => (
     <td
       ref={ref}
-      className={cn('px-5 py-3.5 align-middle text-[#0c0f12]', className)}
+      className={cn('px-4 py-3.5 align-middle text-[#0c0f12]', className)}
       {...props}
     />
   ),

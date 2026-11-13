@@ -1,0 +1,70 @@
+name: ClinicFlow CI — Quality, Build & Database Integration
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality-and-integration:
+    name: Typecheck · Lint · Build · DB Migrations
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: clinicflow
+          POSTGRES_PASSWORD: clinicflow_password
+          POSTGRES_DB: clinicflow_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NODE_ENV: test
+      PORT: 4000
+      DATABASE_URL: postgresql://clinicflow:clinicflow_password@localhost:5432/clinicflow_db
+      DATABASE_SSL: 'false'
+      JWT_SECRET: ci-test-jwt-secret-key-minimum-16-chars
+      JWT_EXPIRES_IN: 8h
+      CORS_ORIGIN: http://localhost:5173
+      VITE_API_URL: http://localhost:4000/api
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install workspace dependencies
+        run: npm ci
+
+      - name: Run TypeScript typechecking across workspaces
+        run: npm run typecheck
+
+      - name: Run ESLint static analysis
+        run: npm run lint
+
+      - name: Build production bundles (shared + api + web)
+        run: npm run build
+
+      - name: Apply PostgreSQL migrations (001 to 005)
+        run: npm run db:migrate
+
+      - name: Seed clinical database & verify idempotency
+        run: |
+          npm run db:seed
+          npm run db:seed

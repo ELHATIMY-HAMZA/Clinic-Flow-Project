@@ -110,11 +110,11 @@ export function PatientDetailsPage() {
       </div>
 
       {/* Patient Info Card wrapped in ReactBits BorderGlow */}
-      <BorderGlow className="p-6 lg:p-8">
+      <BorderGlow className="p-5 sm:p-6 lg:p-8">
         <div className="flex flex-col justify-between gap-4 border-b border-[#0c0f12]/[0.08] pb-6 sm:flex-row sm:items-start">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-[26px] font-bold tracking-tight text-[#0c0f12] sm:text-[30px]">
+              <h1 className="text-[24px] font-bold tracking-tight text-[#0c0f12] sm:text-[30px]">
                 {patient.fullName}
               </h1>
               <Badge variant="teal" className="font-mono text-[13px]">
@@ -126,11 +126,21 @@ export function PatientDetailsPage() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2.5">
-            <Button type="button" variant="secondary" onClick={() => setEditOpen(true)}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setEditOpen(true)}
+              className="flex-1 sm:flex-none"
+            >
               <Pencil className="h-4 w-4" aria-hidden="true" />
               Modifier la fiche
             </Button>
-            <Button type="button" onClick={() => setNewApptOpen(true)} withArrow>
+            <Button
+              type="button"
+              onClick={() => setNewApptOpen(true)}
+              withArrow
+              className="flex-1 sm:flex-none"
+            >
               <CalendarPlus className="h-4 w-4" aria-hidden="true" />
               Nouveau rendez-vous
             </Button>
@@ -170,7 +180,7 @@ export function PatientDetailsPage() {
 
       {/* Patient Appointments List */}
       <BorderGlow className="overflow-hidden p-0">
-        <div className="flex flex-col justify-between gap-4 border-b border-[#0c0f12]/[0.08] px-6 py-5 sm:flex-row sm:items-center">
+        <div className="flex flex-col justify-between gap-4 border-b border-[#0c0f12]/[0.08] px-5 py-4 sm:flex-row sm:items-center sm:px-6 sm:py-5">
           <div>
             <h2 className="text-[18px] font-semibold tracking-tight text-[#0c0f12]">
               Historique des rendez-vous.{' '}
@@ -188,55 +198,96 @@ export function PatientDetailsPage() {
         </div>
 
         {apptsQuery.isLoading ? (
-          <div className="space-y-3 p-6">
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
+          <div className="space-y-3 p-5 sm:p-6">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
           </div>
         ) : filteredAppointments.length === 0 ? (
           <div className="p-10 text-center text-[14px] text-[#5a626a]">
             Aucun rendez-vous dans cette catégorie pour ce patient.
           </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date &amp; heure</TableHead>
-                <TableHead>Motif</TableHead>
-                <TableHead>Notes</TableHead>
-                <TableHead>Statut</TableHead>
-                <TableHead className="text-right">Modifier le statut</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <>
+            {/* Mobile Card List (< 768px) */}
+            <div className="divide-y divide-[#0c0f12]/[0.08] md:hidden">
               {filteredAppointments.map((appt) => (
-                <TableRow key={appt.id}>
-                  <TableCell className="font-mono text-[13px] font-medium whitespace-nowrap">
-                    {formatDateTimeFr(appt.appointmentDate)}
-                  </TableCell>
-                  <TableCell className="font-medium text-[#0c0f12]">{appt.reason}</TableCell>
-                  <TableCell className="text-[#5a626a]">{appt.notes ?? '—'}</TableCell>
-                  <TableCell className="whitespace-nowrap">
+                <article key={appt.id} className="space-y-2.5 p-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-mono text-[13px] font-semibold text-[#0c0f12]">
+                      {formatDateTimeFr(appt.appointmentDate)}
+                    </span>
                     <StatusBadge status={appt.status} />
-                  </TableCell>
-                  <TableCell className="text-right whitespace-nowrap">
+                  </div>
+                  <p className="text-[14px] font-semibold text-[#0c0f12]">{appt.reason}</p>
+                  {appt.notes ? (
+                    <p className="text-[13px] text-[#5a626a]">{appt.notes}</p>
+                  ) : null}
+                  <div className="flex items-center justify-between gap-3 pt-1">
+                    <span className="text-[12px] font-medium text-[#5a626a]">
+                      Modifier le statut :
+                    </span>
                     <select
-                      name={`status-${appt.id}`}
+                      name={`mobile-status-${appt.id}`}
                       aria-label={`Statut du rendez-vous du ${formatDateTimeFr(appt.appointmentDate)}`}
                       value={appt.status}
                       onChange={(e) =>
                         void handleStatusChange(appt.id, e.target.value as AppointmentStatus)
                       }
-                      className="h-8 rounded-lg border border-[#0c0f12]/[0.15] bg-white px-2.5 text-[12px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
+                      className="min-h-[44px] rounded-xl border border-[#0c0f12]/[0.15] bg-white px-3 text-[13px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
                     >
                       <option value="pending">En attente</option>
                       <option value="confirmed">Confirmé</option>
                       <option value="cancelled">Annulé</option>
                     </select>
-                  </TableCell>
-                </TableRow>
+                  </div>
+                </article>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+
+            {/* Desktop Table (>= 768px) */}
+            <div className="hidden md:block">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date &amp; heure</TableHead>
+                    <TableHead>Motif</TableHead>
+                    <TableHead>Notes</TableHead>
+                    <TableHead>Statut</TableHead>
+                    <TableHead className="text-right">Modifier le statut</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredAppointments.map((appt) => (
+                    <TableRow key={appt.id}>
+                      <TableCell className="font-mono text-[13px] font-medium whitespace-nowrap">
+                        {formatDateTimeFr(appt.appointmentDate)}
+                      </TableCell>
+                      <TableCell className="font-medium text-[#0c0f12]">{appt.reason}</TableCell>
+                      <TableCell className="text-[#5a626a]">{appt.notes ?? '—'}</TableCell>
+                      <TableCell className="whitespace-nowrap">
+                        <StatusBadge status={appt.status} />
+                      </TableCell>
+                      <TableCell className="text-right whitespace-nowrap">
+                        <select
+                          name={`status-${appt.id}`}
+                          aria-label={`Statut du rendez-vous du ${formatDateTimeFr(appt.appointmentDate)}`}
+                          value={appt.status}
+                          onChange={(e) =>
+                            void handleStatusChange(appt.id, e.target.value as AppointmentStatus)
+                          }
+                          className="h-9 rounded-lg border border-[#0c0f12]/[0.15] bg-white px-2.5 text-[12px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
+                        >
+                          <option value="pending">En attente</option>
+                          <option value="confirmed">Confirmé</option>
+                          <option value="cancelled">Annulé</option>
+                        </select>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </>
         )}
       </BorderGlow>
 

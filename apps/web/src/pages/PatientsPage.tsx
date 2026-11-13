@@ -1,4 +1,4 @@
-import { Eye, Pencil, Plus, Search, Trash2 } from 'lucide-react';
+import { Eye, Pencil, Phone, Plus, Search, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { toast } from 'sonner';
@@ -68,7 +68,7 @@ export function PatientsPage() {
           <p className="font-mono text-[12px] font-medium tracking-wide text-[#0d9488] uppercase">
             Répertoire clinique · Index trigrammes GIN
           </p>
-          <h1 className="mt-1 text-[28px] leading-tight font-bold tracking-tight text-[#0c0f12] sm:text-[32px]">
+          <h1 className="mt-1 text-[24px] leading-tight font-bold tracking-tight text-[#0c0f12] sm:text-[32px]">
             Dossiers patients.{' '}
             <span className="font-normal text-[#5a626a]">
               Recherchez par nom ou CIN et gérez les fiches.
@@ -82,6 +82,7 @@ export function PatientsPage() {
             setFormOpen(true);
           }}
           withArrow
+          className="w-full sm:w-auto"
         >
           <Plus className="h-4 w-4" aria-hidden="true" />
           Nouveau patient
@@ -90,7 +91,7 @@ export function PatientsPage() {
 
       {/* Search Bar wrapped in ReactBits BorderGlow */}
       <search>
-        <BorderGlow className="p-5">
+        <BorderGlow className="p-4 sm:p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex-1">
               <Label htmlFor="patients-search">
@@ -123,93 +124,161 @@ export function PatientsPage() {
         </BorderGlow>
       </search>
 
-      {/* Patients Data Table wrapped in ReactBits BorderGlow */}
+      {/* Patients Data List / Table wrapped in ReactBits BorderGlow */}
       <BorderGlow className="overflow-hidden p-0">
         {patientsQuery.isLoading ? (
-          <div className="space-y-3 p-6">
-            <Skeleton className="h-11 w-full" />
-            <Skeleton className="h-11 w-full" />
-            <Skeleton className="h-11 w-full" />
-            <Skeleton className="h-11 w-full" />
+          <div className="space-y-3 p-5 sm:p-6">
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
+            <Skeleton className="h-12 w-full" />
           </div>
         ) : patients.length === 0 ? (
           <div className="p-12 text-center text-[15px] text-[#5a626a]">
             Aucun dossier patient ne correspond à votre recherche.
           </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nom complet</TableHead>
-                <TableHead>N° CIN</TableHead>
-                <TableHead>Téléphone</TableHead>
-                <TableHead>Date de naissance</TableHead>
-                <TableHead>Enregistré le</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+          <>
+            {/* Mobile Card List (< 768px) — Zero horizontal overflow & 44px+ touch buttons */}
+            <div className="divide-y divide-[#0c0f12]/[0.08] md:hidden">
               {patients.map((patient) => (
-                <TableRow key={patient.id}>
-                  <TableCell className="font-semibold whitespace-nowrap">
-                    <Link
-                      to={`/patients/${patient.id}`}
-                      className="text-[#0c0f12] decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488] hover:underline"
-                    >
-                      {patient.fullName}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap">
+                <article key={patient.id} className="space-y-3 p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <Link
+                        to={`/patients/${patient.id}`}
+                        className="text-[16px] font-semibold text-[#0c0f12] underline decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488]"
+                      >
+                        {patient.fullName}
+                      </Link>
+                      <p className="mt-0.5 text-[12px] text-[#5a626a]">
+                        Né(e) le {formatDateFr(patient.birthDate)} · Créé le{' '}
+                        {formatDateFr(patient.createdAt)}
+                      </p>
+                    </div>
                     <Badge variant="default" className="font-mono">
                       {patient.cin}
                     </Badge>
-                  </TableCell>
-                  <TableCell className="font-mono text-[13px] whitespace-nowrap text-[#5a626a]">
-                    {patient.phone}
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap text-[#5a626a]">
-                    {formatDateFr(patient.birthDate)}
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap text-[#5a626a]">
-                    {formatDateFr(patient.createdAt)}
-                  </TableCell>
-                  <TableCell className="text-right whitespace-nowrap">
-                    <div className="inline-flex items-center gap-1.5">
-                      <Button variant="secondary" size="xs" asChild>
-                        <Link to={`/patients/${patient.id}`}>
-                          <Eye className="h-3.5 w-3.5" aria-hidden="true" />
-                          Détails
-                        </Link>
-                      </Button>
+                  </div>
+
+                  <div className="flex items-center gap-2 font-mono text-[13px] text-[#0c0f12]">
+                    <Phone className="h-3.5 w-3.5 text-[#0d9488]" aria-hidden="true" />
+                    <span>{patient.phone}</span>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <Button variant="secondary" size="sm" asChild className="flex-1">
+                      <Link to={`/patients/${patient.id}`}>
+                        <Eye className="h-4 w-4" aria-hidden="true" />
+                        Détails
+                      </Link>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() => {
+                        setEditingPatient(patient);
+                        setFormOpen(true);
+                      }}
+                    >
+                      <Pencil className="h-4 w-4" aria-hidden="true" />
+                      Modifier
+                    </Button>
+                    <RoleGate allow="admin">
                       <Button
                         type="button"
-                        variant="secondary"
-                        size="xs"
-                        onClick={() => {
-                          setEditingPatient(patient);
-                          setFormOpen(true);
-                        }}
+                        variant="destructiveOutline"
+                        size="sm"
+                        onClick={() => setDeletingPatient(patient)}
                       >
-                        <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
-                        Modifier
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
+                        Supprimer
                       </Button>
-                      <RoleGate allow="admin">
-                        <Button
-                          type="button"
-                          variant="destructiveOutline"
-                          size="xs"
-                          onClick={() => setDeletingPatient(patient)}
-                        >
-                          <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
-                          Supprimer
-                        </Button>
-                      </RoleGate>
-                    </div>
-                  </TableCell>
-                </TableRow>
+                    </RoleGate>
+                  </div>
+                </article>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+
+            {/* Desktop Data Table (>= 768px) */}
+            <div className="hidden md:block">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nom complet</TableHead>
+                    <TableHead>N° CIN</TableHead>
+                    <TableHead>Téléphone</TableHead>
+                    <TableHead>Date de naissance</TableHead>
+                    <TableHead>Enregistré le</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {patients.map((patient) => (
+                    <TableRow key={patient.id}>
+                      <TableCell className="font-semibold whitespace-nowrap">
+                        <Link
+                          to={`/patients/${patient.id}`}
+                          className="text-[#0c0f12] decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488] hover:underline"
+                        >
+                          {patient.fullName}
+                        </Link>
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap">
+                        <Badge variant="default" className="font-mono">
+                          {patient.cin}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="font-mono text-[13px] whitespace-nowrap text-[#5a626a]">
+                        {patient.phone}
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap text-[#5a626a]">
+                        {formatDateFr(patient.birthDate)}
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap text-[#5a626a]">
+                        {formatDateFr(patient.createdAt)}
+                      </TableCell>
+                      <TableCell className="text-right whitespace-nowrap">
+                        <div className="inline-flex items-center gap-2">
+                          <Button variant="secondary" size="xs" asChild>
+                            <Link to={`/patients/${patient.id}`}>
+                              <Eye className="h-3.5 w-3.5" aria-hidden="true" />
+                              Détails
+                            </Link>
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            size="xs"
+                            onClick={() => {
+                              setEditingPatient(patient);
+                              setFormOpen(true);
+                            }}
+                          >
+                            <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
+                            Modifier
+                          </Button>
+                          <RoleGate allow="admin">
+                            <Button
+                              type="button"
+                              variant="destructiveOutline"
+                              size="xs"
+                              onClick={() => setDeletingPatient(patient)}
+                            >
+                              <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                              Supprimer
+                            </Button>
+                          </RoleGate>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </>
         )}
 
         {meta ? <Pagination meta={meta} onPageChange={setPage} /> : null}

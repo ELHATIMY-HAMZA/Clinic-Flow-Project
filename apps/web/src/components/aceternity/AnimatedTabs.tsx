@@ -51,7 +51,7 @@ export function AnimatedTabs<T extends string>({
             aria-selected={active}
             onClick={() => onChange(item.value)}
             className={cn(
-              'relative inline-flex h-9 items-center gap-2 rounded-lg px-3.5 text-[13px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d9488]',
+              'relative inline-flex min-h-[40px] items-center gap-2 rounded-lg px-3 text-[13px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d9488] sm:min-h-[36px] sm:px-3.5',
               active ? 'text-white' : 'text-[#5a626a] hover:text-[#0c0f12]',
             )}
           >

@@ -49,25 +49,30 @@ export function DashboardPage() {
   const todayAppointments = todayApptsQuery.data?.data ?? [];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header following taste-skill two-part sentence hierarchy */}
       <header className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <p className="font-mono text-[12px] font-medium tracking-wide text-[#0d9488] uppercase">
             Vue d’ensemble · {todayIso}
           </p>
-          <h1 className="mt-1 text-[28px] leading-tight font-bold tracking-tight text-[#0c0f12] sm:text-[32px]">
+          <h1 className="mt-1 text-[24px] leading-tight font-bold tracking-tight text-[#0c0f12] sm:text-[32px]">
             Tableau de bord clinique.{' '}
             <span className="font-normal text-[#5a626a]">
               Activité du jour et suivi des créneaux.
             </span>
           </h1>
         </div>
-        <div className="flex items-center gap-2.5">
-          <Button type="button" variant="secondary" asChild>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <Button type="button" variant="secondary" asChild className="flex-1 sm:flex-none">
             <Link to="/patients">Voir les patients</Link>
           </Button>
-          <Button type="button" onClick={() => setCreateOpen(true)} withArrow>
+          <Button
+            type="button"
+            onClick={() => setCreateOpen(true)}
+            withArrow
+            className="flex-1 sm:flex-none"
+          >
             <Plus className="h-4 w-4" aria-hidden="true" />
             Planifier un rendez-vous
           </Button>
@@ -114,9 +119,12 @@ export function DashboardPage() {
         />
       </BentoGrid>
 
-      {/* Live Workflow Visual Banner + Today's Appointments Table */}
+      {/* Live Workflow Visual Banner + Today's Appointments */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        <BorderGlow className="flex flex-col justify-between p-6 lg:p-7" containerClassName="lg:col-span-5">
+        <BorderGlow
+          className="flex flex-col justify-between p-5 sm:p-6"
+          containerClassName="lg:col-span-4"
+        >
           <div className="space-y-2">
             <Badge variant="teal">Règle métier garantie</Badge>
             <h2 className="text-[18px] font-semibold tracking-tight text-[#0c0f12]">
@@ -135,10 +143,10 @@ export function DashboardPage() {
           </div>
         </BorderGlow>
 
-        <BorderGlow className="overflow-hidden p-0" containerClassName="lg:col-span-7">
-          <div className="flex items-center justify-between border-b border-[#0c0f12]/[0.08] px-6 py-5">
+        <BorderGlow className="overflow-hidden p-0" containerClassName="lg:col-span-8">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#0c0f12]/[0.08] px-5 py-4 sm:px-6 sm:py-5">
             <div>
-              <h2 className="text-[18px] font-semibold tracking-tight text-[#0c0f12]">
+              <h2 className="text-[17px] font-semibold tracking-tight text-[#0c0f12] sm:text-[18px]">
                 Consultations d’aujourd’hui.{' '}
                 <span className="font-normal text-[#5a626a]">
                   {todayAppointments.length} créneau{todayAppointments.length > 1 ? 'x' : ''}
@@ -151,68 +159,120 @@ export function DashboardPage() {
           </div>
 
           {todayApptsQuery.isLoading ? (
-            <div className="space-y-3 p-6">
-              <Skeleton className="h-10 w-full" />
-              <Skeleton className="h-10 w-full" />
-              <Skeleton className="h-10 w-full" />
+            <div className="space-y-3 p-5 sm:p-6">
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
             </div>
           ) : todayAppointments.length === 0 ? (
             <div className="p-10 text-center text-[14px] text-[#5a626a]">
               Aucun rendez-vous programmé pour aujourd’hui.
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Horaire</TableHead>
-                  <TableHead>Patient</TableHead>
-                  <TableHead>Motif</TableHead>
-                  <TableHead>Statut</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+            <>
+              {/* Mobile Card List (< 768px) — Zero horizontal overflow & 44px+ touch controls */}
+              <div className="divide-y divide-[#0c0f12]/[0.08] md:hidden">
                 {todayAppointments.map((appt) => (
-                  <TableRow key={appt.id}>
-                    <TableCell className="font-mono text-[13px] font-medium whitespace-nowrap">
-                      {formatDateTimeFr(appt.appointmentDate)}
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap">
-                      <Link
-                        to={`/patients/${appt.patientId}`}
-                        className="font-semibold text-[#0c0f12] decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488] hover:underline"
-                      >
-                        {appt.patientFullName}
-                      </Link>
-                      <span className="ml-2 rounded-md bg-[#f4f4f2] px-1.5 py-0.5 font-mono text-[11px] text-[#5a626a]">
-                        {appt.patientCin}
-                      </span>
-                    </TableCell>
-                    <TableCell className="max-w-[200px] truncate text-[#5a626a]">
-                      {appt.reason}
-                    </TableCell>
-                    <TableCell className="whitespace-nowrap">
+                  <article key={appt.id} className="space-y-3 p-4">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <Link
+                          to={`/patients/${appt.patientId}`}
+                          className="text-[15px] font-semibold text-[#0c0f12] underline decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488]"
+                        >
+                          {appt.patientFullName}
+                        </Link>
+                        <div className="mt-1 flex items-center gap-2">
+                          <span className="rounded-md bg-[#f4f4f2] px-1.5 py-0.5 font-mono text-[11px] text-[#5a626a]">
+                            {appt.patientCin}
+                          </span>
+                          <span className="font-mono text-[12px] font-medium text-[#0c0f12]">
+                            {formatDateTimeFr(appt.appointmentDate)}
+                          </span>
+                        </div>
+                      </div>
                       <StatusBadge status={appt.status} />
-                    </TableCell>
-                    <TableCell className="text-right whitespace-nowrap">
+                    </div>
+                    <p className="text-[13px] text-[#5a626a]">{appt.reason}</p>
+                    <div className="flex items-center justify-between gap-3 pt-1">
+                      <span className="text-[12px] font-medium text-[#5a626a]">
+                        Modifier le statut :
+                      </span>
                       <select
-                        name={`status-${appt.id}`}
+                        name={`mobile-status-${appt.id}`}
                         aria-label={`Statut du rendez-vous de ${appt.patientFullName}`}
                         value={appt.status}
                         onChange={(e) =>
                           void handleStatusChange(appt.id, e.target.value as AppointmentStatus)
                         }
-                        className="h-8 rounded-lg border border-[#0c0f12]/[0.15] bg-white px-2.5 text-[12px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
+                        className="min-h-[44px] rounded-xl border border-[#0c0f12]/[0.15] bg-white px-3 text-[13px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
                       >
                         <option value="pending">En attente</option>
                         <option value="confirmed">Confirmé</option>
                         <option value="cancelled">Annulé</option>
                       </select>
-                    </TableCell>
-                  </TableRow>
+                    </div>
+                  </article>
                 ))}
-              </TableBody>
-            </Table>
+              </div>
+
+              {/* Desktop Table (>= 768px) */}
+              <div className="hidden md:block">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Horaire</TableHead>
+                      <TableHead>Patient &amp; motif</TableHead>
+                      <TableHead>Statut</TableHead>
+                      <TableHead className="text-right">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {todayAppointments.map((appt) => (
+                      <TableRow key={appt.id}>
+                        <TableCell className="font-mono text-[13px] font-medium whitespace-nowrap">
+                          {formatDateTimeFr(appt.appointmentDate)}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap items-center gap-2">
+                            <Link
+                              to={`/patients/${appt.patientId}`}
+                              className="font-semibold text-[#0c0f12] decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488] hover:underline"
+                            >
+                              {appt.patientFullName}
+                            </Link>
+                            <span className="rounded-md bg-[#f4f4f2] px-1.5 py-0.5 font-mono text-[11px] text-[#5a626a]">
+                              {appt.patientCin}
+                            </span>
+                          </div>
+                          <p className="mt-0.5 max-w-[260px] truncate text-[12px] text-[#5a626a]">
+                            {appt.reason}
+                          </p>
+                        </TableCell>
+                        <TableCell className="whitespace-nowrap">
+                          <StatusBadge status={appt.status} />
+                        </TableCell>
+                        <TableCell className="text-right whitespace-nowrap">
+                          <select
+                            name={`status-${appt.id}`}
+                            aria-label={`Statut du rendez-vous de ${appt.patientFullName}`}
+                            value={appt.status}
+                            onChange={(e) =>
+                              void handleStatusChange(appt.id, e.target.value as AppointmentStatus)
+                            }
+                            className="h-9 rounded-lg border border-[#0c0f12]/[0.15] bg-white px-2.5 text-[12px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
+                          >
+                            <option value="pending">En attente</option>
+                            <option value="confirmed">Confirmé</option>
+                            <option value="cancelled">Annulé</option>
+                          </select>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </>
           )}
         </BorderGlow>
       </div>
