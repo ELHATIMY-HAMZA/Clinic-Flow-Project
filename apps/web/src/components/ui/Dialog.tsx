@@ -45,17 +45,17 @@ export function Dialog({
       aria-describedby={description ? descId : undefined}
       onClose={onClose}
       className={cn(
-        'm-auto max-h-[90dvh] w-[calc(100vw-1.5rem)] max-w-lg overflow-y-auto rounded-[20px] border border-[#0c0f12]/[0.14] bg-white p-0 text-[#0c0f12] shadow-2xl sm:w-full',
+        'm-auto max-h-[90dvh] w-[calc(100vw-1.5rem)] max-w-lg overflow-y-auto rounded-[20px] border border-[#0F172A]/[0.12] bg-white p-0 text-[#0F172A] shadow-2xl sm:w-full',
         className,
       )}
     >
-      <div className="flex items-start justify-between gap-3 border-b border-[#0c0f12]/[0.08] px-5 py-4 sm:px-6 sm:py-5">
+      <div className="flex items-start justify-between gap-3 border-b border-[#0F172A]/[0.08] px-5 py-4 sm:px-6 sm:py-5">
         <div>
-          <h2 id={titleId} className="text-[18px] font-semibold tracking-tight text-[#0c0f12]">
+          <h2 id={titleId} className="text-[18px] font-semibold tracking-tight text-[#0F172A]">
             {title}
           </h2>
           {description ? (
-            <p id={descId} className="mt-1 text-[13px] leading-relaxed text-[#5a626a]">
+            <p id={descId} className="mt-1 text-[13px] leading-relaxed text-[#475569]">
               {description}
             </p>
           ) : null}
@@ -64,7 +64,7 @@ export function Dialog({
           type="button"
           onClick={onClose}
           aria-label="Fermer la boîte de dialogue"
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#5a626a] transition hover:bg-[#f4f4f2] hover:text-[#0c0f12]"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#475569] transition hover:bg-[#F4F7FB] hover:text-[#0F172A]"
         >
           <X className="h-5 w-5" />
         </button>

@@ -65,13 +65,13 @@ export function PatientsPage() {
     <div className="space-y-6">
       <header className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <p className="font-mono text-[12px] font-medium tracking-wide text-[#0d9488] uppercase">
-            Répertoire clinique · Index trigrammes GIN
+          <p className="text-[12px] font-semibold tracking-wider text-[#0284C7] uppercase">
+            Fiches &amp; coordonnées
           </p>
-          <h1 className="mt-1 text-[24px] leading-tight font-bold tracking-tight text-[#0c0f12] sm:text-[32px]">
+          <h1 className="mt-1 text-[24px] leading-tight font-bold tracking-tight text-[#0F172A] sm:text-[32px]">
             Dossiers patients.{' '}
-            <span className="font-normal text-[#5a626a]">
-              Recherchez par nom ou CIN et gérez les fiches.
+            <span className="font-normal text-[#475569]">
+              Retrouvez une fiche ou inscrivez un nouveau patient.
             </span>
           </h1>
         </div>
@@ -89,17 +89,17 @@ export function PatientsPage() {
         </Button>
       </header>
 
-      {/* Search Bar wrapped in ReactBits BorderGlow */}
+      {/* Search Bar */}
       <search>
         <BorderGlow className="p-4 sm:p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div className="flex-1">
               <Label htmlFor="patients-search">
-                Recherche instantanée (nom complet ou numéro de CIN)
+                Rechercher un patient (par nom ou numéro de CIN)
               </Label>
               <div className="relative mt-1.5">
                 <Search
-                  className="pointer-events-none absolute top-3.5 left-3.5 h-4 w-4 text-[#5a626a]"
+                  className="pointer-events-none absolute top-3.5 left-3.5 h-4 w-4 text-[#64748B]"
                   aria-hidden="true"
                 />
                 <Input
@@ -115,8 +115,8 @@ export function PatientsPage() {
             </div>
             {meta ? (
               <div className="flex items-center gap-2 pb-1">
-                <Badge variant="default" className="font-mono">
-                  {meta.total} dossier{meta.total > 1 ? 's' : ''}
+                <Badge variant="teal" className="font-mono">
+                  {meta.total} patient{meta.total > 1 ? 's' : ''}
                 </Badge>
               </div>
             ) : null}
@@ -124,7 +124,7 @@ export function PatientsPage() {
         </BorderGlow>
       </search>
 
-      {/* Patients Data List / Table wrapped in ReactBits BorderGlow */}
+      {/* Patients Data List / Table */}
       <BorderGlow className="overflow-hidden p-0">
         {patientsQuery.isLoading ? (
           <div className="space-y-3 p-5 sm:p-6">
@@ -134,25 +134,25 @@ export function PatientsPage() {
             <Skeleton className="h-12 w-full" />
           </div>
         ) : patients.length === 0 ? (
-          <div className="p-12 text-center text-[15px] text-[#5a626a]">
+          <div className="p-12 text-center text-[15px] text-[#475569]">
             Aucun dossier patient ne correspond à votre recherche.
           </div>
         ) : (
           <>
-            {/* Mobile Card List (< 768px) — Zero horizontal overflow & 44px+ touch buttons */}
-            <div className="divide-y divide-[#0c0f12]/[0.08] md:hidden">
+            {/* Mobile Card List (< 768px) */}
+            <div className="divide-y divide-[#0F172A]/[0.07] md:hidden">
               {patients.map((patient) => (
                 <article key={patient.id} className="space-y-3 p-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <Link
                         to={`/patients/${patient.id}`}
-                        className="text-[16px] font-semibold text-[#0c0f12] underline decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488]"
+                        className="text-[16px] font-semibold text-[#0F172A] underline decoration-[#0F172A]/25 underline-offset-4 hover:text-[#0284C7]"
                       >
                         {patient.fullName}
                       </Link>
-                      <p className="mt-0.5 text-[12px] text-[#5a626a]">
-                        Né(e) le {formatDateFr(patient.birthDate)} · Créé le{' '}
+                      <p className="mt-0.5 text-[12px] text-[#64748B]">
+                        Né(e) le {formatDateFr(patient.birthDate)} · Inscrit le{' '}
                         {formatDateFr(patient.createdAt)}
                       </p>
                     </div>
@@ -161,8 +161,8 @@ export function PatientsPage() {
                     </Badge>
                   </div>
 
-                  <div className="flex items-center gap-2 font-mono text-[13px] text-[#0c0f12]">
-                    <Phone className="h-3.5 w-3.5 text-[#0d9488]" aria-hidden="true" />
+                  <div className="flex items-center gap-2 font-mono text-[13px] text-[#0F172A]">
+                    <Phone className="h-3.5 w-3.5 text-[#0284C7]" aria-hidden="true" />
                     <span>{patient.phone}</span>
                   </div>
 
@@ -170,7 +170,7 @@ export function PatientsPage() {
                     <Button variant="secondary" size="sm" asChild className="flex-1">
                       <Link to={`/patients/${patient.id}`}>
                         <Eye className="h-4 w-4" aria-hidden="true" />
-                        Détails
+                        Voir la fiche
                       </Link>
                     </Button>
                     <Button
@@ -211,7 +211,7 @@ export function PatientsPage() {
                     <TableHead>N° CIN</TableHead>
                     <TableHead>Téléphone</TableHead>
                     <TableHead>Date de naissance</TableHead>
-                    <TableHead>Enregistré le</TableHead>
+                    <TableHead>Inscrit le</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -221,7 +221,7 @@ export function PatientsPage() {
                       <TableCell className="font-semibold whitespace-nowrap">
                         <Link
                           to={`/patients/${patient.id}`}
-                          className="text-[#0c0f12] decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488] hover:underline"
+                          className="text-[#0F172A] decoration-[#0F172A]/25 underline-offset-4 hover:text-[#0284C7] hover:underline"
                         >
                           {patient.fullName}
                         </Link>
@@ -231,13 +231,13 @@ export function PatientsPage() {
                           {patient.cin}
                         </Badge>
                       </TableCell>
-                      <TableCell className="font-mono text-[13px] whitespace-nowrap text-[#5a626a]">
+                      <TableCell className="font-mono text-[13px] whitespace-nowrap text-[#475569]">
                         {patient.phone}
                       </TableCell>
-                      <TableCell className="whitespace-nowrap text-[#5a626a]">
+                      <TableCell className="whitespace-nowrap text-[#475569]">
                         {formatDateFr(patient.birthDate)}
                       </TableCell>
-                      <TableCell className="whitespace-nowrap text-[#5a626a]">
+                      <TableCell className="whitespace-nowrap text-[#475569]">
                         {formatDateFr(patient.createdAt)}
                       </TableCell>
                       <TableCell className="text-right whitespace-nowrap">
@@ -296,7 +296,7 @@ export function PatientsPage() {
         title="Confirmer la suppression du dossier"
         description={
           deletingPatient
-            ? `Voulez-vous vraiment supprimer le dossier de ${deletingPatient.fullName} (${deletingPatient.cin}) ? Ses rendez-vous associés seront également supprimés par cascade.`
+            ? `Voulez-vous vraiment supprimer le dossier de ${deletingPatient.fullName} (${deletingPatient.cin}) ? Ses rendez-vous associés seront également supprimés.`
             : undefined
         }
       >

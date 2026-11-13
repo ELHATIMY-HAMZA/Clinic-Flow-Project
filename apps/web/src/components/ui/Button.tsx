@@ -4,19 +4,19 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils.js';
 
 export const buttonVariants = cva(
-  'btn-taste inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[10px] text-[14px] font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d9488] disabled:pointer-events-none disabled:opacity-50',
+  'btn-taste inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[10px] text-[14px] font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0284C7] disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'bg-[#0d9488] text-white hover:bg-[#0b7c72]',
-        ink: 'bg-[#0c0f12] text-white hover:bg-[#1e242b]',
+        default: 'bg-[#0284C7] text-white shadow-xs hover:bg-[#0369A1]',
+        ink: 'bg-[#0F172A] text-white hover:bg-[#1E293B]',
         secondary:
-          'border border-[#0c0f12]/[0.14] bg-white text-[#0c0f12] hover:border-[#0c0f12]/25 hover:bg-[#f4f4f2]',
+          'border border-[#0F172A]/[0.12] bg-white text-[#0F172A] hover:border-[#0284C7]/35 hover:bg-[#F4F7FB]',
         destructive:
           'border border-rose-600/20 bg-rose-600 text-white hover:bg-rose-700',
         destructiveOutline:
           'border border-rose-600/25 bg-rose-50/70 text-rose-800 hover:border-rose-600/40 hover:bg-rose-100/80',
-        ghost: 'text-[#5a626a] hover:bg-[#0c0f12]/[0.06] hover:text-[#0c0f12]',
+        ghost: 'text-[#475569] hover:bg-[#0F172A]/[0.06] hover:text-[#0F172A]',
       },
       size: {
         default: 'h-11 px-5 py-2.5',
@@ -39,10 +39,6 @@ export interface ButtonProps
   withArrow?: boolean;
 }
 
-/**
- * shadcn/ui `<Button>` component with `design-taste-frontend` tactile hover/press physics
- * (`-1px` step on hover, `+1px` & `.985` scale on press, `.m-arrow` sliding 3px right).
- */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, withArrow = false, children, ...props }, ref) => {
     const classes = cn(buttonVariants({ variant, size, className }));

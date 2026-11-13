@@ -37,7 +37,7 @@ export function AnimatedTabs<T extends string>({
       role="tablist"
       aria-label={ariaLabel}
       className={cn(
-        'inline-flex flex-wrap items-center gap-1 rounded-xl border border-[#0c0f12]/[0.11] bg-[#eaeae6]/70 p-1',
+        'inline-flex flex-wrap items-center gap-1 rounded-xl border border-[#0F172A]/[0.09] bg-[#F4F7FB] p-1',
         className,
       )}
     >
@@ -51,15 +51,15 @@ export function AnimatedTabs<T extends string>({
             aria-selected={active}
             onClick={() => onChange(item.value)}
             className={cn(
-              'relative inline-flex min-h-[40px] items-center gap-2 rounded-lg px-3 text-[13px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d9488] sm:min-h-[36px] sm:px-3.5',
-              active ? 'text-white' : 'text-[#5a626a] hover:text-[#0c0f12]',
+              'relative inline-flex min-h-[40px] items-center gap-2 rounded-lg px-3 text-[13px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0284C7] sm:min-h-[36px] sm:px-3.5',
+              active ? 'text-white' : 'text-[#475569] hover:text-[#0F172A]',
             )}
           >
             {active ? (
               <motion.span
                 layoutId={layoutId}
                 transition={{ type: 'spring', bounce: 0, duration: 0.26 }}
-                className="absolute inset-0 rounded-lg bg-[#0c0f12] shadow-xs"
+                className="absolute inset-0 rounded-lg bg-[#0284C7] shadow-xs"
                 aria-hidden="true"
               />
             ) : null}
@@ -70,7 +70,7 @@ export function AnimatedTabs<T extends string>({
                 <span
                   className={cn(
                     'rounded-md px-1.5 py-0.5 font-mono text-[11px]',
-                    active ? 'bg-white/15 text-white' : 'bg-[#0c0f12]/[0.07] text-[#0c0f12]',
+                    active ? 'bg-white/20 text-white' : 'bg-[#0F172A]/[0.06] text-[#0F172A]',
                   )}
                 >
                   {item.count}

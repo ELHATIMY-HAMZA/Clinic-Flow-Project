@@ -25,7 +25,7 @@ export const TableHeader = forwardRef<
 >(({ className, ...props }, ref) => (
   <thead
     ref={ref}
-    className={cn('border-b border-[#0c0f12]/[0.09] bg-[#f4f4f2]/70', className)}
+    className={cn('border-b border-[#0F172A]/[0.08] bg-[#F4F7FB]', className)}
     {...props}
   />
 ));
@@ -37,7 +37,7 @@ export const TableBody = forwardRef<
 >(({ className, ...props }, ref) => (
   <tbody
     ref={ref}
-    className={cn('divide-y divide-[#0c0f12]/[0.07] bg-white', className)}
+    className={cn('divide-y divide-[#0F172A]/[0.06] bg-white', className)}
     {...props}
   />
 ));
@@ -47,7 +47,7 @@ export const TableRow = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTable
   ({ className, ...props }, ref) => (
     <tr
       ref={ref}
-      className={cn('transition-colors hover:bg-[#f4f4f2]/60', className)}
+      className={cn('transition-colors hover:bg-[#F4F7FB]/80', className)}
       {...props}
     />
   ),
@@ -59,7 +59,7 @@ export const TableHead = forwardRef<HTMLTableCellElement, ThHTMLAttributes<HTMLT
     <th
       ref={ref}
       className={cn(
-        'h-11 px-4 align-middle text-[13px] font-medium text-[#5a626a] whitespace-nowrap',
+        'h-11 px-4 align-middle text-[13px] font-medium text-[#475569] whitespace-nowrap',
         className,
       )}
       {...props}
@@ -72,7 +72,7 @@ export const TableCell = forwardRef<HTMLTableCellElement, TdHTMLAttributes<HTMLT
   ({ className, ...props }, ref) => (
     <td
       ref={ref}
-      className={cn('px-4 py-3.5 align-middle text-[#0c0f12]', className)}
+      className={cn('px-4 py-3.5 align-middle text-[#0F172A]', className)}
       {...props}
     />
   ),

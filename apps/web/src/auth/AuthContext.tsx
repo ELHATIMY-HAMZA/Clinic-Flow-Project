@@ -96,10 +96,10 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-50">
-        <div className="flex items-center gap-3 text-slate-600">
-          <span className="h-5 w-5 animate-spin rounded-full border-2 border-teal-600 border-t-transparent" />
-          <span className="text-sm font-medium">Chargement de la session…</span>
+      <div className="flex min-h-screen items-center justify-center bg-[#F4F7FB]">
+        <div className="flex items-center gap-3 text-[#475569]">
+          <span className="h-5 w-5 animate-spin rounded-full border-2 border-[#0284C7] border-t-transparent" />
+          <span className="text-sm font-medium">Ouverture de votre espace…</span>
         </div>
       </div>
     );

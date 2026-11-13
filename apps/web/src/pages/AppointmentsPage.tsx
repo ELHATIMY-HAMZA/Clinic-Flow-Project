@@ -66,13 +66,13 @@ export function AppointmentsPage() {
     <div className="space-y-6">
       <header className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <p className="font-mono text-[12px] font-medium tracking-wide text-[#0d9488] uppercase">
-            Planning médical · Fenêtre de sécurité 30 min
+          <p className="text-[12px] font-semibold tracking-wider text-[#0284C7] uppercase">
+            Agenda des consultations
           </p>
-          <h1 className="mt-1 text-[24px] leading-tight font-bold tracking-tight text-[#0c0f12] sm:text-[32px]">
-            Rendez-vous.{' '}
-            <span className="font-normal text-[#5a626a]">
-              Filtrez par date ou statut et gérez les confirmations.
+          <h1 className="mt-1 text-[24px] leading-tight font-bold tracking-tight text-[#0F172A] sm:text-[32px]">
+            Planning des rendez-vous.{' '}
+            <span className="font-normal text-[#475569]">
+              Filtrez l’agenda par date ou statut et confirmez les créneaux.
             </span>
           </h1>
         </div>
@@ -87,12 +87,12 @@ export function AppointmentsPage() {
         </Button>
       </header>
 
-      {/* Filters bar with Aceternity AnimatedTabs + Date Picker inside ReactBits BorderGlow */}
+      {/* Filters bar */}
       <search>
         <BorderGlow className="p-4 sm:p-5">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
             <div className="space-y-1.5">
-              <span className="block text-[13px] font-medium text-[#0c0f12]">
+              <span className="block text-[13px] font-medium text-[#0F172A]">
                 Statut de la consultation
               </span>
               <AnimatedTabs
@@ -111,7 +111,7 @@ export function AppointmentsPage() {
                 <Label htmlFor="filter-date">Filtrer par date</Label>
                 <div className="relative mt-1.5">
                   <Calendar
-                    className="pointer-events-none absolute top-3.5 left-3.5 h-4 w-4 text-[#5a626a]"
+                    className="pointer-events-none absolute top-3.5 left-3.5 h-4 w-4 text-[#64748B]"
                     aria-hidden="true"
                   />
                   <Input
@@ -144,7 +144,7 @@ export function AppointmentsPage() {
         </BorderGlow>
       </search>
 
-      {/* Appointments List / Table wrapped in ReactBits BorderGlow */}
+      {/* Appointments List / Table */}
       <BorderGlow className="overflow-hidden p-0">
         {appointmentsQuery.isLoading ? (
           <div className="space-y-3 p-5 sm:p-6">
@@ -154,28 +154,28 @@ export function AppointmentsPage() {
             <Skeleton className="h-12 w-full" />
           </div>
         ) : appointments.length === 0 ? (
-          <div className="p-12 text-center text-[15px] text-[#5a626a]">
+          <div className="p-12 text-center text-[15px] text-[#475569]">
             Aucun rendez-vous trouvé pour les filtres sélectionnés.
           </div>
         ) : (
           <>
-            {/* Mobile Card List (< 768px) — Zero horizontal overflow & 44px+ touch controls */}
-            <div className="divide-y divide-[#0c0f12]/[0.08] md:hidden">
+            {/* Mobile Card List (< 768px) */}
+            <div className="divide-y divide-[#0F172A]/[0.07] md:hidden">
               {appointments.map((appt) => (
                 <article key={appt.id} className="space-y-3 p-4">
                   <div className="flex items-start justify-between gap-2">
                     <div>
                       <Link
                         to={`/patients/${appt.patientId}`}
-                        className="text-[16px] font-semibold text-[#0c0f12] underline decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488]"
+                        className="text-[16px] font-semibold text-[#0F172A] underline decoration-[#0F172A]/25 underline-offset-4 hover:text-[#0284C7]"
                       >
                         {appt.patientFullName}
                       </Link>
                       <div className="mt-1 flex flex-wrap items-center gap-2">
-                        <span className="rounded-md bg-[#f4f4f2] px-1.5 py-0.5 font-mono text-[11px] text-[#5a626a]">
+                        <span className="rounded-md bg-[#F4F7FB] px-1.5 py-0.5 font-mono text-[11px] text-[#475569]">
                           {appt.patientCin}
                         </span>
-                        <span className="font-mono text-[12px] font-medium text-[#0c0f12]">
+                        <span className="font-mono text-[12px] font-medium text-[#0F172A]">
                           {formatDateTimeFr(appt.appointmentDate)}
                         </span>
                       </div>
@@ -184,20 +184,20 @@ export function AppointmentsPage() {
                   </div>
 
                   <div>
-                    <p className="text-[14px] font-medium text-[#0c0f12]">{appt.reason}</p>
+                    <p className="text-[14px] font-medium text-[#0F172A]">{appt.reason}</p>
                     {appt.notes ? (
-                      <p className="mt-0.5 text-[13px] text-[#5a626a]">{appt.notes}</p>
+                      <p className="mt-0.5 text-[13px] text-[#475569]">{appt.notes}</p>
                     ) : null}
                     {appt.createdByName ? (
-                      <p className="mt-1 text-[11px] text-[#5a626a]">
-                        Créé par : <span className="font-medium">{appt.createdByName}</span>
+                      <p className="mt-1 text-[11px] text-[#64748B]">
+                        Enregistré par : <span className="font-medium">{appt.createdByName}</span>
                       </p>
                     ) : null}
                   </div>
 
                   <div className="flex items-center justify-between gap-3 pt-1">
-                    <span className="text-[12px] font-medium text-[#5a626a]">
-                      Changer le statut :
+                    <span className="text-[12px] font-medium text-[#475569]">
+                      Statut du rendez-vous :
                     </span>
                     <select
                       name={`mobile-status-${appt.id}`}
@@ -206,7 +206,7 @@ export function AppointmentsPage() {
                       onChange={(e) =>
                         void handleStatusChange(appt.id, e.target.value as AppointmentStatus)
                       }
-                      className="min-h-[44px] rounded-xl border border-[#0c0f12]/[0.15] bg-white px-3 text-[13px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
+                      className="min-h-[44px] rounded-xl border border-[#0F172A]/[0.14] bg-white px-3 text-[13px] font-medium text-[#0F172A] focus:border-[#0284C7] focus:outline-none"
                     >
                       <option value="pending">En attente</option>
                       <option value="confirmed">Confirmé</option>
@@ -226,9 +226,9 @@ export function AppointmentsPage() {
                     <TableHead>Patient</TableHead>
                     <TableHead>Motif</TableHead>
                     <TableHead>Notes</TableHead>
-                    <TableHead>Créé par</TableHead>
+                    <TableHead>Enregistré par</TableHead>
                     <TableHead>Statut</TableHead>
-                    <TableHead className="text-right">Changer le statut</TableHead>
+                    <TableHead className="text-right">Modifier le statut</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -240,19 +240,19 @@ export function AppointmentsPage() {
                       <TableCell className="whitespace-nowrap">
                         <Link
                           to={`/patients/${appt.patientId}`}
-                          className="font-semibold text-[#0c0f12] decoration-[#0c0f12]/30 underline-offset-4 hover:text-[#0d9488] hover:underline"
+                          className="font-semibold text-[#0F172A] decoration-[#0F172A]/25 underline-offset-4 hover:text-[#0284C7] hover:underline"
                         >
                           {appt.patientFullName}
                         </Link>
-                        <span className="ml-2 rounded-md bg-[#f4f4f2] px-1.5 py-0.5 font-mono text-[11px] text-[#5a626a]">
+                        <span className="ml-2 rounded-md bg-[#F4F7FB] px-1.5 py-0.5 font-mono text-[11px] text-[#475569]">
                           {appt.patientCin}
                         </span>
                       </TableCell>
-                      <TableCell className="font-medium text-[#0c0f12]">{appt.reason}</TableCell>
-                      <TableCell className="max-w-[220px] truncate text-[#5a626a]">
+                      <TableCell className="font-medium text-[#0F172A]">{appt.reason}</TableCell>
+                      <TableCell className="max-w-[220px] truncate text-[#475569]">
                         {appt.notes ?? '—'}
                       </TableCell>
-                      <TableCell className="whitespace-nowrap text-[13px] text-[#5a626a]">
+                      <TableCell className="whitespace-nowrap text-[13px] text-[#475569]">
                         {appt.createdByName ?? '—'}
                       </TableCell>
                       <TableCell className="whitespace-nowrap">
@@ -266,7 +266,7 @@ export function AppointmentsPage() {
                           onChange={(e) =>
                             void handleStatusChange(appt.id, e.target.value as AppointmentStatus)
                           }
-                          className="h-9 rounded-lg border border-[#0c0f12]/[0.15] bg-white px-2.5 text-[12px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
+                          className="h-9 rounded-lg border border-[#0F172A]/[0.14] bg-white px-2.5 text-[12px] font-medium text-[#0F172A] focus:border-[#0284C7] focus:outline-none"
                         >
                           <option value="pending">En attente</option>
                           <option value="confirmed">Confirmé</option>

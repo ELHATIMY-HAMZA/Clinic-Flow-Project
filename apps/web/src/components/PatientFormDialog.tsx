@@ -182,20 +182,20 @@ export function PatientFormDialog({ open, onClose, patient }: PatientFormDialogP
           <Label htmlFor="patient-address">
             Adresse <span className="font-normal text-[#5a626a]">(optionnel)</span>
           </Label>
-          <textarea
-            id="patient-address"
-            rows={2}
-            aria-invalid={Boolean(errors.address)}
-            placeholder="Ex. Rue Ibn Sina, Quartier Agdal"
-            className="mt-1.5 block w-full rounded-[10px] border border-[#0c0f12]/[0.15] bg-white px-3.5 py-2 text-[14px] text-[#0c0f12] transition-[border-color,box-shadow] duration-140 placeholder:text-[#5a626a]/65 focus:border-[#0d9488] focus:ring-3 focus:ring-[#0d9488]/15 focus:outline-none"
-            {...register('address')}
-          />
-          {errors.address ? (
-            <p className="mt-1.5 text-[13px] text-rose-600">{errors.address.message}</p>
-          ) : null}
-        </div>
+            <textarea
+              id="patient-address"
+              rows={2}
+              aria-invalid={Boolean(errors.address)}
+              placeholder="Ex. Rue Ibn Sina, Quartier Agdal"
+              className="mt-1.5 block w-full rounded-[10px] border border-[#0F172A]/[0.14] bg-white px-3.5 py-2 text-[14px] text-[#0F172A] transition-[border-color,box-shadow] duration-140 placeholder:text-[#64748B]/70 focus:border-[#0284C7] focus:ring-3 focus:ring-[#0284C7]/15 focus:outline-none"
+              {...register('address')}
+            />
+            {errors.address ? (
+              <p className="mt-1.5 text-[13px] text-rose-600">{errors.address.message}</p>
+            ) : null}
+          </div>
 
-        <div className="flex items-center justify-end gap-2.5 border-t border-[#0c0f12]/[0.08] pt-4">
+          <div className="flex items-center justify-end gap-2.5 border-t border-[#0F172A]/[0.08] pt-4">
           <Button type="button" variant="secondary" onClick={onClose}>
             Annuler
           </Button>

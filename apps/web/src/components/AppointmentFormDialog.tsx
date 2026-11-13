@@ -119,7 +119,7 @@ export function AppointmentFormDialog({
               required
               value={patientId}
               onChange={(e) => setPatientId(e.target.value)}
-              className="mt-1.5 flex h-11 w-full rounded-[10px] border border-[#0c0f12]/[0.15] bg-white px-3.5 py-2 text-[14px] text-[#0c0f12] focus:border-[#0d9488] focus:ring-3 focus:ring-[#0d9488]/15 focus:outline-none"
+              className="mt-1.5 flex h-11 w-full rounded-[10px] border border-[#0F172A]/[0.14] bg-white px-3.5 py-2 text-[14px] text-[#0F172A] focus:border-[#0284C7] focus:ring-3 focus:ring-[#0284C7]/15 focus:outline-none"
             >
               <option value="">Sélectionner un patient…</option>
               {patients.map((p) => (
@@ -148,17 +148,17 @@ export function AppointmentFormDialog({
           </div>
 
           <div>
-            <Label htmlFor="appt-status">Statut initial</Label>
+            <Label htmlFor="appt-status">Statut du rendez-vous</Label>
             <select
               id="appt-status"
               name="status"
               value={status}
               onChange={(e) => setStatus(e.target.value as AppointmentStatus)}
-              className="mt-1.5 flex h-11 w-full rounded-[10px] border border-[#0c0f12]/[0.15] bg-white px-3.5 py-2 text-[14px] text-[#0c0f12] focus:border-[#0d9488] focus:ring-3 focus:ring-[#0d9488]/15 focus:outline-none"
+              className="mt-1.5 flex h-11 w-full rounded-[10px] border border-[#0F172A]/[0.14] bg-white px-3.5 py-2 text-[14px] text-[#0F172A] focus:border-[#0284C7] focus:ring-3 focus:ring-[#0284C7]/15 focus:outline-none"
             >
-              <option value="pending">En attente (pending)</option>
-              <option value="confirmed">Confirmé (confirmed)</option>
-              <option value="cancelled">Annulé (cancelled)</option>
+              <option value="pending">En attente</option>
+              <option value="confirmed">Confirmé</option>
+              <option value="cancelled">Annulé</option>
             </select>
           </div>
         </div>
@@ -181,7 +181,7 @@ export function AppointmentFormDialog({
 
         <div>
           <Label htmlFor="appt-notes">
-            Notes <span className="font-normal text-[#5a626a]">(optionnel)</span>
+            Notes <span className="font-normal text-[#64748B]">(optionnel)</span>
           </Label>
           <textarea
             id="appt-notes"
@@ -190,11 +190,11 @@ export function AppointmentFormDialog({
             placeholder="Observations ou instructions particulières…"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="mt-1.5 block w-full rounded-[10px] border border-[#0c0f12]/[0.15] bg-white px-3.5 py-2 text-[14px] text-[#0c0f12] transition-[border-color,box-shadow] duration-140 placeholder:text-[#5a626a]/65 focus:border-[#0d9488] focus:ring-3 focus:ring-[#0d9488]/15 focus:outline-none"
+            className="mt-1.5 block w-full rounded-[10px] border border-[#0F172A]/[0.14] bg-white px-3.5 py-2 text-[14px] text-[#0F172A] transition-[border-color,box-shadow] duration-140 placeholder:text-[#64748B]/70 focus:border-[#0284C7] focus:ring-3 focus:ring-[#0284C7]/15 focus:outline-none"
           />
         </div>
 
-        <div className="flex items-center justify-end gap-2.5 border-t border-[#0c0f12]/[0.08] pt-4">
+        <div className="flex items-center justify-end gap-2.5 border-t border-[#0F172A]/[0.08] pt-4">
           <Button type="button" variant="secondary" onClick={onClose}>
             Annuler
           </Button>

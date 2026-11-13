@@ -59,8 +59,8 @@ export function PatientDetailsPage() {
   if (!patient) {
     return (
       <BorderGlow className="p-10 text-center">
-        <p className="text-[18px] font-semibold text-[#0c0f12]">Patient introuvable</p>
-        <p className="mt-1 text-[14px] text-[#5a626a]">
+        <p className="text-[18px] font-semibold text-[#0F172A]">Patient introuvable</p>
+        <p className="mt-1 text-[14px] text-[#475569]">
           Ce dossier n’existe pas ou a été supprimé.
         </p>
         <Button variant="secondary" asChild className="mt-5">
@@ -104,25 +104,25 @@ export function PatientDetailsPage() {
         <Button variant="ghost" size="sm" asChild>
           <Link to="/patients">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            Retour aux patients
+            Retour aux dossiers patients
           </Link>
         </Button>
       </div>
 
-      {/* Patient Info Card wrapped in ReactBits BorderGlow */}
+      {/* Patient Info Card */}
       <BorderGlow className="p-5 sm:p-6 lg:p-8">
-        <div className="flex flex-col justify-between gap-4 border-b border-[#0c0f12]/[0.08] pb-6 sm:flex-row sm:items-start">
+        <div className="flex flex-col justify-between gap-4 border-b border-[#0F172A]/[0.07] pb-6 sm:flex-row sm:items-start">
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-[24px] font-bold tracking-tight text-[#0c0f12] sm:text-[30px]">
+              <h1 className="text-[24px] font-bold tracking-tight text-[#0F172A] sm:text-[30px]">
                 {patient.fullName}
               </h1>
               <Badge variant="teal" className="font-mono text-[13px]">
                 CIN : {patient.cin}
               </Badge>
             </div>
-            <p className="mt-1.5 text-[13px] text-[#5a626a]">
-              Dossier enregistré le {formatDateFr(patient.createdAt)}
+            <p className="mt-1.5 text-[13px] text-[#64748B]">
+              Dossier inscrit le {formatDateFr(patient.createdAt)}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2.5">
@@ -148,30 +148,30 @@ export function PatientDetailsPage() {
         </div>
 
         <dl className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border border-[#0c0f12]/[0.08] bg-[#f4f4f2]/70 p-4">
-            <dt className="flex items-center gap-1.5 text-[13px] font-medium text-[#5a626a]">
-              <Phone className="h-3.5 w-3.5 text-[#0d9488]" aria-hidden="true" />
+          <div className="rounded-xl border border-[#0F172A]/[0.07] bg-[#F4F7FB] p-4">
+            <dt className="flex items-center gap-1.5 text-[13px] font-medium text-[#475569]">
+              <Phone className="h-3.5 w-3.5 text-[#0284C7]" aria-hidden="true" />
               Téléphone
             </dt>
-            <dd className="mt-1.5 font-mono text-[15px] font-semibold text-[#0c0f12]">
+            <dd className="mt-1.5 font-mono text-[15px] font-semibold text-[#0F172A]">
               {patient.phone}
             </dd>
           </div>
-          <div className="rounded-xl border border-[#0c0f12]/[0.08] bg-[#f4f4f2]/70 p-4">
-            <dt className="flex items-center gap-1.5 text-[13px] font-medium text-[#5a626a]">
-              <UserCheck className="h-3.5 w-3.5 text-[#0d9488]" aria-hidden="true" />
+          <div className="rounded-xl border border-[#0F172A]/[0.07] bg-[#F4F7FB] p-4">
+            <dt className="flex items-center gap-1.5 text-[13px] font-medium text-[#475569]">
+              <UserCheck className="h-3.5 w-3.5 text-[#0284C7]" aria-hidden="true" />
               Date de naissance
             </dt>
-            <dd className="mt-1.5 text-[15px] font-semibold text-[#0c0f12]">
+            <dd className="mt-1.5 text-[15px] font-semibold text-[#0F172A]">
               {formatDateFr(patient.birthDate)}
             </dd>
           </div>
-          <div className="rounded-xl border border-[#0c0f12]/[0.08] bg-[#f4f4f2]/70 p-4">
-            <dt className="flex items-center gap-1.5 text-[13px] font-medium text-[#5a626a]">
-              <MapPin className="h-3.5 w-3.5 text-[#0d9488]" aria-hidden="true" />
+          <div className="rounded-xl border border-[#0F172A]/[0.07] bg-[#F4F7FB] p-4">
+            <dt className="flex items-center gap-1.5 text-[13px] font-medium text-[#475569]">
+              <MapPin className="h-3.5 w-3.5 text-[#0284C7]" aria-hidden="true" />
               Adresse
             </dt>
-            <dd className="mt-1.5 text-[15px] font-semibold text-[#0c0f12]">
+            <dd className="mt-1.5 text-[15px] font-semibold text-[#0F172A]">
               {patient.address ?? 'Non renseignée'}
             </dd>
           </div>
@@ -180,12 +180,12 @@ export function PatientDetailsPage() {
 
       {/* Patient Appointments List */}
       <BorderGlow className="overflow-hidden p-0">
-        <div className="flex flex-col justify-between gap-4 border-b border-[#0c0f12]/[0.08] px-5 py-4 sm:flex-row sm:items-center sm:px-6 sm:py-5">
+        <div className="flex flex-col justify-between gap-4 border-b border-[#0F172A]/[0.07] px-5 py-4 sm:flex-row sm:items-center sm:px-6 sm:py-5">
           <div>
-            <h2 className="text-[18px] font-semibold tracking-tight text-[#0c0f12]">
-              Historique des rendez-vous.{' '}
-              <span className="font-normal text-[#5a626a]">
-                {allAppointments.length} consultation{allAppointments.length > 1 ? 's' : ''}
+            <h2 className="text-[18px] font-semibold tracking-tight text-[#0F172A]">
+              Historique des consultations.{' '}
+              <span className="font-normal text-[#475569]">
+                {allAppointments.length} rendez-vous
               </span>
             </h2>
           </div>
@@ -203,27 +203,27 @@ export function PatientDetailsPage() {
             <Skeleton className="h-12 w-full" />
           </div>
         ) : filteredAppointments.length === 0 ? (
-          <div className="p-10 text-center text-[14px] text-[#5a626a]">
+          <div className="p-10 text-center text-[14px] text-[#475569]">
             Aucun rendez-vous dans cette catégorie pour ce patient.
           </div>
         ) : (
           <>
             {/* Mobile Card List (< 768px) */}
-            <div className="divide-y divide-[#0c0f12]/[0.08] md:hidden">
+            <div className="divide-y divide-[#0F172A]/[0.07] md:hidden">
               {filteredAppointments.map((appt) => (
                 <article key={appt.id} className="space-y-2.5 p-4">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono text-[13px] font-semibold text-[#0c0f12]">
+                    <span className="font-mono text-[13px] font-semibold text-[#0F172A]">
                       {formatDateTimeFr(appt.appointmentDate)}
                     </span>
                     <StatusBadge status={appt.status} />
                   </div>
-                  <p className="text-[14px] font-semibold text-[#0c0f12]">{appt.reason}</p>
+                  <p className="text-[14px] font-semibold text-[#0F172A]">{appt.reason}</p>
                   {appt.notes ? (
-                    <p className="text-[13px] text-[#5a626a]">{appt.notes}</p>
+                    <p className="text-[13px] text-[#475569]">{appt.notes}</p>
                   ) : null}
                   <div className="flex items-center justify-between gap-3 pt-1">
-                    <span className="text-[12px] font-medium text-[#5a626a]">
+                    <span className="text-[12px] font-medium text-[#475569]">
                       Modifier le statut :
                     </span>
                     <select
@@ -233,7 +233,7 @@ export function PatientDetailsPage() {
                       onChange={(e) =>
                         void handleStatusChange(appt.id, e.target.value as AppointmentStatus)
                       }
-                      className="min-h-[44px] rounded-xl border border-[#0c0f12]/[0.15] bg-white px-3 text-[13px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
+                      className="min-h-[44px] rounded-xl border border-[#0F172A]/[0.14] bg-white px-3 text-[13px] font-medium text-[#0F172A] focus:border-[#0284C7] focus:outline-none"
                     >
                       <option value="pending">En attente</option>
                       <option value="confirmed">Confirmé</option>
@@ -262,8 +262,8 @@ export function PatientDetailsPage() {
                       <TableCell className="font-mono text-[13px] font-medium whitespace-nowrap">
                         {formatDateTimeFr(appt.appointmentDate)}
                       </TableCell>
-                      <TableCell className="font-medium text-[#0c0f12]">{appt.reason}</TableCell>
-                      <TableCell className="text-[#5a626a]">{appt.notes ?? '—'}</TableCell>
+                      <TableCell className="font-medium text-[#0F172A]">{appt.reason}</TableCell>
+                      <TableCell className="text-[#475569]">{appt.notes ?? '—'}</TableCell>
                       <TableCell className="whitespace-nowrap">
                         <StatusBadge status={appt.status} />
                       </TableCell>
@@ -275,7 +275,7 @@ export function PatientDetailsPage() {
                           onChange={(e) =>
                             void handleStatusChange(appt.id, e.target.value as AppointmentStatus)
                           }
-                          className="h-9 rounded-lg border border-[#0c0f12]/[0.15] bg-white px-2.5 text-[12px] font-medium text-[#0c0f12] focus:border-[#0d9488] focus:outline-none"
+                          className="h-9 rounded-lg border border-[#0F172A]/[0.14] bg-white px-2.5 text-[12px] font-medium text-[#0F172A] focus:border-[#0284C7] focus:outline-none"
                         >
                           <option value="pending">En attente</option>
                           <option value="confirmed">Confirmé</option>

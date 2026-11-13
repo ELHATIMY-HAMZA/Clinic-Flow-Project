@@ -20,7 +20,8 @@ Adopter une architecture UI hybride fondée sur **Tailwind CSS v4** et les princ
    - Sur Mobile (`md:hidden`) : Cartes cliniques structurées avec contrôles tactiles de `44px` minimum.
    - Sur Desktop (`hidden md:block`) : Tableaux de données complets.
 3. **Palette Calibrée & Primitives Réutilisables** :
-   - Fond pierre chaude (`#f4f4f2`), cartes blanc pur (`#ffffff`), encre (`#0c0f12`) et accent unique sarcelle clinique (`#0d9488`).
+   - Fond nuage doux (`#F4F7FB`), cartes blanc pur (`#FFFFFF`), encre ardoise profonde (`#0F172A`) et accent unique bleu médical céruléen (`#0284C7`).
+   - Logo vectoriel sur mesure (`ClinicFlowLogo.tsx`) combinant croix médicale, arc fluide et onde de pouls avec identifiants SVG isolés (`useId`).
    - Combinaison de primitives **shadcn/ui** (`Button`, `Input`, `Badge`, `Table`, `Dialog`), **Aceternity UI** (`Spotlight`, `BentoGrid`, `AnimatedTabs`) et **ReactBits** (`BorderGlow`).
 
 ## Conséquences
