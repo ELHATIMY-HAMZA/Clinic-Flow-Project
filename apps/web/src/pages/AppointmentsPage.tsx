@@ -194,6 +194,7 @@ export function AppointmentsPage() {
                   </TableCell>
                   <TableCell className="text-right whitespace-nowrap">
                     <select
+                      name={`status-${appt.id}`}
                       aria-label={`Statut du rendez-vous de ${appt.patientFullName}`}
                       value={appt.status}
                       onChange={(e) =>

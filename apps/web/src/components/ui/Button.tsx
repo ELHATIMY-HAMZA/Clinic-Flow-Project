@@ -45,15 +45,20 @@ export interface ButtonProps
  */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, withArrow = false, children, ...props }, ref) => {
-    const Comp = asChild ? Slot : 'button';
+    const classes = cn(buttonVariants({ variant, size, className }));
+
+    if (asChild) {
+      return (
+        <Slot ref={ref} className={classes} {...props}>
+          {children}
+        </Slot>
+      );
+    }
+
     return (
-      <Comp
-        ref={ref}
-        className={cn(buttonVariants({ variant, size, className }))}
-        {...props}
-      >
+      <button ref={ref} className={classes} {...props}>
         {children}
-        {withArrow && !asChild ? (
+        {withArrow ? (
           <svg
             className="m-arrow h-3.5 w-3.5 shrink-0"
             viewBox="0 0 16 16"
@@ -69,7 +74,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             />
           </svg>
         ) : null}
-      </Comp>
+      </button>
     );
   },
 );

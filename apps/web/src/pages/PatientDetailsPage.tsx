@@ -220,6 +220,7 @@ export function PatientDetailsPage() {
                   </TableCell>
                   <TableCell className="text-right whitespace-nowrap">
                     <select
+                      name={`status-${appt.id}`}
                       aria-label={`Statut du rendez-vous du ${formatDateTimeFr(appt.appointmentDate)}`}
                       value={appt.status}
                       onChange={(e) =>
