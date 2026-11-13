@@ -23,7 +23,7 @@
 
 - **Zéro double-réservation garantie mathématiquement** : un patient ne peut jamais avoir deux rendez-vous `confirmed` dans une fenêtre de **30 minutes**, protégé à la fois par le service Express et par une contrainte atomique PostgreSQL `EXCLUDE USING gist` (résistante aux conditions de course concurrentes).
 - **Recherche clinique instantanée** : recherche par nom complet ou numéro de **CIN** propulsée par des index trigrammes PostgreSQL `GIN (pg_trgm)`.
-- **Contrôle d’accès basé sur les rôles (RBAC)** : séparation stricte entre `admin` (accès complet, suppression de dossiers) et `receptionist` (accueil, création/modification de patients et gestion du planning).
+- **Contrôle d’accès basé sur les rôles (RBAC)** : séparation stricte entre `admin` (accès complet, suppression de dossiers) et `staff` (accueil, création/modification de patients et gestion du planning).
 - **Interface Hybride Desktop & Mobile** :
   - **Poste Secrétariat (`1024px` – `1440px+`)** : Barre latérale architecturale fixe, barre de contexte supérieure, BentoGrid analytique et tableaux haute densité.
   - **Mobile & Tablette en Clinique (`390px` – `768px`)** : Barre de navigation inférieure fixe (`safe-area`), cartes cliniques tactiles (`>= 44px`), zéro défilement horizontal.
@@ -96,11 +96,13 @@ docker compose up --build
 
 ## 4. Comptes de Démonstration (Créés par `npm run db:seed`)
 
-| Rôle | E-mail | Mot de passe | Permissions |
-|---|---|---|---|
-| **Administrateur (`admin`)** | `admin@clinicflow.ma` | `Admin123!` | Accès total, création/édition/suppression de patients, gestion des rendez-vous |
-| **Réceptionniste (`receptionist`)** | `reception@clinicflow.ma` | `Reception123!` | Accès complet sauf suppression de dossiers patients (`DELETE /api/patients/:id` → `403`) |
-| **Réceptionniste 2 (`receptionist`)** | `sara.benali@clinicflow.ma` | `Reception123!` | Accès complet sauf suppression de dossiers patients |
+Le script `apps/api/db/seed.ts` insère **1 admin, 2 staff, 5 patients et 10 rendez-vous** (mix `pending` / `confirmed` / `cancelled`) :
+
+| Rôle | Nom complet | E-mail | Mot de passe | Permissions |
+|---|---|---|---|---|
+| **`admin`** | Amina El Idrissi | `admin@clinicflow.ma` | `Admin123!` | Accès total, création/édition/suppression de patients, gestion des rendez-vous |
+| **`staff`** | Youssef Benali | `staff1@clinicflow.ma` | `Staff123!` | Accès complet sauf suppression de dossiers patients (`DELETE /api/patients/:id` → `403`) |
+| **`staff`** | Salma Tazi | `staff2@clinicflow.ma` | `Staff123!` | Accès complet sauf suppression de dossiers patients |
 
 ---
 

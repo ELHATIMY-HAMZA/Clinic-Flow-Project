@@ -8,7 +8,7 @@ Ce document définit le langage ubiquitaire (*Ubiquitous Language*) et les front
 
 | Terme du domaine | Identifiant technique | Définition métier & Invariants |
 |---|---|---|
-| **Utilisateur Clinique** (*User*) | `users` (`User`) | Collaborateur authentifié de la clinique. Possède un rôle strict : `admin` (gestion complète, suppression de dossiers) ou `receptionist` (accueil, création/modification de patients et gestion des rendez-vous). |
+| **Utilisateur Clinique** (*User*) | `users` (`User`) | Collaborateur authentifié de la clinique. Possède un rôle strict : `admin` (gestion complète, suppression de dossiers) ou `staff` (accueil, création/modification de patients et gestion des rendez-vous). |
 | **Dossier Patient** (*Patient Record*) | `patients` (`Patient`) | Fiche administrative et médicale d’un patient identifié de manière unique par son **N° CIN** (`VARCHAR(20) UNIQUE`). La suppression d’un dossier entraîne la suppression en cascade (`ON DELETE CASCADE`) de ses rendez-vous. |
 | **Rendez-vous** (*Appointment*) | `appointments` (`Appointment`) | Créneau de consultation rattaché à un patient (`patient_id`) et tracé par son créateur (`created_by`). Suit un cycle de vie à 3 états : `pending` (En attente), `confirmed` (Confirmé), `cancelled` (Annulé). |
 | **Fenêtre d’Exclusivité de 30 Minutes** (*30-Minute Conflict Window*) | `appointments_no_confirmed_overlap_30m` | **Règle métier critique** : un même patient ne peut jamais avoir deux rendez-vous au statut `confirmed` dont l’écart temporel est strictement inférieur à 30 minutes ($\|t_1 - t_2\| < 30\text{ min}$). |

@@ -9,7 +9,7 @@ labels: bug
 <!-- Description claire et concise de l'anomalie -->
 
 ## Étapes pour reproduire
-1. Se connecter avec le rôle `...` (`admin` ou `receptionist`)
+1. Se connecter avec le rôle `...` (`admin` ou `staff`)
 2. Naviguer vers `...`
 3. Effectuer l'action `...`
 4. Observer l'erreur

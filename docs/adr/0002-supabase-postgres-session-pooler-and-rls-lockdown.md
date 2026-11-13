@@ -9,7 +9,7 @@ Accepté
 ## Contexte
 Nous souhaitions utiliser **Supabase** comme infrastructure de base de données managée en cloud tout en respectant strictement les exigences techniques du cahier des charges ClinicFlow :
 1. Backend Node.js + Express autonome exposant `/api/auth/login`, `/api/patients`, `/api/appointments`, `/api/dashboard/stats`.
-2. Authentification personnalisée par **JWT** et hachage **bcrypt** sur une table `users` dédiée (`admin` / `receptionist`).
+2. Authentification personnalisée par **JWT** et hachage **bcrypt** sur une table `users` dédiée (`admin` / `staff`).
 3. Compatibilité réseau universelle (IPv4 et IPv6) depuis les postes de développement et conteneurs Docker.
 
 Par ailleurs, Supabase expose par défaut une API PostgREST (`Data API`) sur le schéma `public`, qui génère des alertes de sécurité si le *Row Level Security* (`RLS`) n’est pas activé sur les tables publiques.
