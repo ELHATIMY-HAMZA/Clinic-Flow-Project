@@ -8,6 +8,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFound.js';
 import { appointmentsRouter } from './modules/appointments/appointments.routes.js';
 import { authRouter } from './modules/auth/auth.routes.js';
+import { dashboardRouter } from './modules/dashboard/dashboard.routes.js';
 import { patientsRouter } from './modules/patients/patients.routes.js';
 import { logger } from './utils/logger.js';
 
@@ -44,6 +45,7 @@ export function createApp(): Express {
   app.use('/api/auth', authRouter);
   app.use('/api/patients', patientsRouter);
   app.use('/api/appointments', appointmentsRouter);
+  app.use('/api/dashboard', dashboardRouter);
 
   app.use(notFoundHandler);
   app.use(errorHandler);
