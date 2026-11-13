@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+/* Prevent scroll chaining behind native modal <dialog> elements */
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  background-color: rgb(15 23 42 / 0.55);
+  backdrop-filter: blur(2px);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
