@@ -1,0 +1,33 @@
+{
+  "name": "clinicflow",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ClinicFlow — gestion des patients et rendez-vous (PERN)",
+  "type": "module",
+  "workspaces": [
+    "packages/shared",
+    "apps/api",
+    "apps/web"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build:shared": "npm run build -w @clinicflow/shared",
+    "dev": "npm run build:shared && concurrently -k -n shared,api,web -c gray,blue,magenta \"npm run dev -w @clinicflow/shared\" \"npm run dev -w @clinicflow/api\" \"npm run dev -w @clinicflow/web\"",
+    "build": "npm run build:shared && npm run build -w @clinicflow/api && npm run build -w @clinicflow/web",
+    "typecheck": "npm run build:shared && npm run typecheck --workspaces --if-present",
+    "lint": "eslint .",
+    "db:migrate": "npm run db:migrate -w @clinicflow/api",
+    "db:seed": "npm run db:seed -w @clinicflow/api",
+    "db:reset": "npm run db:reset -w @clinicflow/api"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.0",
+    "concurrently": "^10.0.7",
+    "eslint": "^10.14.0",
+    "globals": "^17.0.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.2"
+  }
+}
